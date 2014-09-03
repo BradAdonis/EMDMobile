@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="forgotVerificationArray">
+        <item>Email</item>
+        <item>SMS</item>
+        <item>Support</item>
+    </string-array>
+    <string-array name="serversArray">
+        <item>ontime.e-md.co.za</item>
+        <item>ontimedev.e-md.co.za</item>
+    </string-array>
+    <string-array name="protocolsArray">
+        <item>https</item>
+        <item>http</item>
+    </string-array>
+    <string-array name="listLimits">
+        <item>10</item>
+        <item>20</item>
+        <item>50</item>
+        <item>100</item>
+        <item>200</item>
+    </string-array>
+    <string-array name="frequencyMinutes">
+        <item>5</item>
+        <item>10</item>
+        <item>30</item>
+        <item>60</item>
+        <item>120</item>
+        <item>360</item>
+    </string-array>
+</resources>

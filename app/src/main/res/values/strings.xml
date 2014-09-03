@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Application Strings -->
+    <string name="app_name">eMD Mobile</string>
+    <string name="appSettingsTitle">Settings</string>
+    <string name="appCommGrouping">Communication</string>
+    <string name="appCommProtocol">Protocol</string>
+    <string name="appCommProtocolDefault">https</string>
+    <string name="appCommProtocolDesc">Web communication protocol</string>
+    <string name="appCommServer">Server</string>
+    <string name="appCommServerDescription">Web server DNS name</string>
+    <string name="appCommServerDefault">ontimedev.e-md.co.za</string>
+    <string name="appCommMethod">Method</string>
+    <string name="appCommMethodDescription">Web server web method</string>
+    <string name="appCommMethodDefault">eMDSwitchMobileRequest</string>
+    <string name="appUIGrouping">User Interface</string>
+    <string name="appUIListLimit">List Limits</string>
+    <string name="appUIListLimitDefaults">100</string>
+    <string name="appUIListLimitDescription">Number of list entries to display</string>
+    <string name="appUIPatientModifiedSince">Patients Modified Since</string>
+    <string name="appUIPatientModifiedSinceDescription">Last date since patients modified YYYY/MM/DD</string>
+    <string name="appUIPatientModifiedSinceHelp">YYYY/MM/DD</string>
+    <string name="appUIPatientModifiedSinceDefault">1900/01/01</string>
+    <string name="appUIClaimModifiedSince">Claims Modified Since</string>
+    <string name="appUIClaimModifiedSinceDescription">Last date since claims modified YYYY/MM/DD</string>
+    <string name="appUIClaimModifiedSinceHelp">YYYY/MM/DD</string>
+    <string name="appUIClaimModifiedSinceDefault">1900/01/01</string>
+    <string name="appUIQueryFrequency">Fetch data frequency</string>
+    <string name="appUIQueryFrequenceDescription">Frequency at which new data is fetched from the cloud in minutes</string>
+    <string name="appUIQueryFrequencyDefaults">120</string>
+    <string name="appUIOfflineStartTime">Offline start time</string>
+    <string name="appUIOfflineStartTimeDescription">Time when offline mode will start</string>
+    <string name="appUIOfflineStartHelp">HH:MM</string>
+    <string name="appUIOfflineStartDefault">20:00</string>
+    <string name="appUIOfflineEndTime">Offline end time</string>
+    <string name="appUIOfflineEndDescription">Time when offline mode will end and online will resume</string>
+    <string name="appUIOfflineEndHelp">HH:MM</string>
+    <string name="appUIOfflineEndDefault">06:00</string>
+    <!-- Application Drawer Strings -->
+    <string name="title_section1">Patients</string>
+    <string name="title_section2">Claims</string>
+    <string name="title_section3">Med Aid Outstanding</string>
+    <string name="title_section4">Totals Monthly</string>
+    <string name="title_section5">Patient Liable</string>
+    <string name="title_section6">Liability</string>
+    <string name="title_section7">Med Aid by Month</string>
+    <string name="title_section8">Patient by Month</string>
+    <string name="title_section9">Accounting Report</string>
+    <string name="title_section10">Section 10</string>
+    <string name="title_section11">Section 11</string>
+    <string name="title_section12">Section 12</string>
+    <string name="title_section13">Section 13</string>
+    <string name="title_section14">Section 14</string>
+    <string name="title_section15">Section 15</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_settings">Preferences</string>
+    <string name="action_register">Register</string>
+    <string name="action_search">Search</string>
+    <string name="hello_world">Hello world!</string>
+    <!-- Web Service Strings -->
+    <string name="webserverprotocol">http://</string>
+    <string name="webserver">ontimedev.e-md.co.za</string>
+    <string name="webserverpath">eMDWebMessage</string>
+    <string name="webmethodevents">EventsGet</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_user_registration">userRegistration</string>
+    <!-- Search Dialog Box Strings -->
+    <string name="searchLabel">Practice Search</string>
+    <string name="searchSearch">Search</string>
+    <string name="searchCancel">Cancel</string>
+    <!-- Registration Details -->
+    <string name="registrationPracticeNumber">Practice Number</string>
+    <string name="registrationPracticeName">Practice Name</string>
+    <string name="registrationRegistrationPractice">Register</string>
+    <string name="registrationHeader">Practice Information</string>
+    <string name="registrationUserName">Username</string>
+    <string name="registrationEmail">Email</string>
+    <string name="registrationMobile">Mobile</string>
+    <string name="registrationPassword">Enter Database Password</string>
+    <string name="registrationSave">Save</string>
+    <string name="registrationRemove">Remove</string>
+    <string name="registrationResetPassword">Forgot Password</string>
+    <string name="registrationUnknown">Unknown</string>
+    <!-- Forgot Password -->
+    <string name="forgotLabel">Forgot Password</string>
+    <string name="forgotVerificationLabel">Verification Method</string>
+    <string name="forgotVerificationButton">Send One Time Pin</string>
+    <string name="forgotOTPLabel">One Time Pin</string>
+    <string name="forgotPassword">Password</string>
+    <string name="forgotConfirmPassword">Confirm Password</string>
+    <string name="forgotSetPassword">Set Password</string>
+    <string name="forgotCancel">Cancel</string>
+    <!-- Patient Item List -->
+    <string name="patientAccount">A00000</string>
+    <string name="patientName">Bradley Cunningham</string>
+    <string name="patientDOB">1900-01-01</string>
+    <string name="patientGender">Male</string>
+    <string name="patientMedicalAid">Discovery</string>
+    <string name="patientContact">0832582085</string>
+    <string name="patientAddress">28 Rove Park Gardens Parkrand</string>
+    <string name="title_activity_web_view">webViewActivity</string>
+
+</resources>

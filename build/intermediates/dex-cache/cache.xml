@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pre-dex-items>
+
+    <item
+        dex="C:\Users\Bradl_000\AndroidStudioProjects\EMDMobile\app\build\intermediates\pre-dexed\debug\support-v4-19.1.0-e311e493b238b75da4095bd5ee7b69d76d73dc42.jar"
+        jar="C:\Program Files (x86)\Android\android-studio\sdk\extras\android\m2repository\com\android\support\support-v4\19.1.0\support-v4-19.1.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="85f201b380937e61a9dce6ca90ccf6872abbfb67"/>
+    <item
+        dex="C:\Users\Bradl_000\AndroidStudioProjects\EMDMobile\app\build\intermediates\pre-dexed\debug\jsoup-1.7.3-9ba2b9511fab9097b0a91b649d3779e4e62ede8a.jar"
+        jar="C:\Users\Bradl_000\AndroidStudioProjects\EMDMobile\app\libs\jsoup-1.7.3.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="ab1f22cadc2f8b514e55ba368f5128056fe304da"/>
+    <item
+        dex="C:\Users\Bradl_000\AndroidStudioProjects\EMDMobile\app\build\intermediates\pre-dexed\debug\classes-d0e538c879f2fee3081351c4fd0b13a896b23754.jar"
+        jar="C:\Users\Bradl_000\AndroidStudioProjects\EMDMobile\build\intermediates\exploded-aar\com.android.support\appcompat-v7\19.1.0\classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="3499ceba05ca1f6037c6a2fad73df8f636224a28"/>
+    <item
+        dex="C:\Users\Bradl_000\AndroidStudioProjects\EMDMobile\app\build\intermediates\pre-dexed\debug\gson-2.2.4-3e3f65c57491e48e494104f031960e3890ebd861.jar"
+        jar="C:\Users\Bradl_000\AndroidStudioProjects\EMDMobile\app\libs\gson-2.2.4.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="973e832af433b44c3ed11c426f2f390b29f3f3f8"/>
+
+</pre-dex-items>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#efefef"
+    android:padding="@dimen/layout_padding">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#012968"
+        android:id="@+id/searchHeader">
+        <TextView
+            android:id="@+id/lblSearchLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@string/searchLabel"
+            android:textSize="20dp"
+            android:textColor="#FFF"
+            android:layout_margin="@dimen/keyline_margin"/>
+    </RelativeLayout>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtSearch"
+        android:layout_below="@id/searchHeader"
+        android:numeric="integer"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchButtons"
+        android:layout_below="@+id/txtSearch"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnSearch"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:textColor="#fff"
+            android:text="@string/searchSearch"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/searchPlaceholder"
+            android:background="@android:color/holo_orange_dark"
+            android:layout_margin="@dimen/item_spacing"/>
+
+        <View android:id="@+id/searchPlaceholder"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_centerHorizontal="true"/>
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:textColor="#fff"
+            android:text="@string/searchCancel"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@+id/searchPlaceholder"
+            android:background="@android:color/holo_orange_dark"
+            android:layout_margin="@dimen/item_spacing"/>
+    </RelativeLayout>
+
+</RelativeLayout>

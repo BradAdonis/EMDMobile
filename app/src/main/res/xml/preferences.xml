@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/appCommGrouping"
+        android:key="pref_key_comm_settings">
+            <ListPreference android:key="pref_key_comm_protocol"
+                android:title="@string/appCommProtocol"
+                android:summary="@string/appCommProtocolDesc"
+                android:defaultValue="@string/appCommProtocolDefault"
+                android:entries="@array/protocolsArray"
+                android:entryValues="@array/protocolsArray"/>
+
+            <ListPreference android:key="pref_key_comm_server"
+                android:title="@string/appCommServer"
+                android:summary="@string/appCommServerDescription"
+                android:defaultValue="@string/appCommServerDefault"
+                android:entries="@array/serversArray"
+                android:entryValues="@array/serversArray"/>
+
+            <EditTextPreference android:key="pref_key_comm_method"
+                android:title="@string/appCommMethod"
+                android:summary="@string/appCommMethodDescription"
+                android:defaultValue="@string/appCommMethodDefault"/>
+        </PreferenceCategory>
+    <PreferenceCategory android:title="@string/appUIGrouping">
+        <ListPreference android:title="@string/appUIListLimit"
+                        android:key="pref_key_ui_limit"
+                        android:summary="@string/appUIListLimitDescription"
+                        android:defaultValue="@string/appUIListLimitDefaults"
+                        android:entries="@array/listLimits"
+                        android:entryValues="@array/listLimits"/>
+        <EditTextPreference android:title="@string/appUIOfflineStartTime"
+            android:key="pref_key_ui_offlinestart"
+            android:summary="@string/appUIOfflineStartTimeDescription"
+            android:hint="@string/appUIOfflineStartHelp"
+            android:defaultValue="@string/appUIOfflineStartDefault"/>
+        <EditTextPreference android:title="@string/appUIOfflineEndTime"
+            android:key="pref_key_ui_offlineend"
+            android:summary="@string/appUIOfflineEndDescription"
+            android:hint="@string/appUIOfflineEndHelp"
+            android:defaultValue="@string/appUIOfflineEndDefault"/>
+        <ListPreference android:title="@string/appUIQueryFrequency"
+            android:key="pref_key_ui_freq"
+            android:summary="@string/appUIQueryFrequenceDescription"
+            android:defaultValue="@string/appUIQueryFrequencyDefaults"
+            android:entries="@array/frequencyMinutes"
+            android:entryValues="@array/frequencyMinutes"/>
+        <EditTextPreference android:title="@string/appUIPatientModifiedSince"
+            android:key="pref_key_ui_patmod"
+            android:summary="@string/appUIPatientModifiedSinceDescription"
+            android:hint="@string/appUIPatientModifiedSinceHelp"
+            android:defaultValue="@string/appUIPatientModifiedSinceDefault"/>
+        <EditTextPreference android:title="@string/appUIClaimModifiedSince"
+            android:key="pref_key_ui_claimmod"
+            android:summary="@string/appUIClaimModifiedSinceDescription"
+            android:hint="@string/appUIClaimModifiedSinceHelp"
+            android:defaultValue="@string/appUIClaimModifiedSinceDefault"/>
+    </PreferenceCategory>
+</PreferenceScreen>

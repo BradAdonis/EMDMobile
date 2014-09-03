@@ -1,0 +1,32 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="navigation_drawer_width">240dp</dimen>
+    <dimen name="keyline_margin">16dp</dimen>
+    <dimen name="keyline_content_start">72dp</dimen>
+    <dimen name="keyline_content_end_with_fab">32dp</dimen>
+    <dimen name="primary_header">16sp</dimen>
+    <dimen name="secondary_content">12sp</dimen>
+    <dimen name="default_header">14sp</dimen>
+    <dimen name="item_spacing">4dp</dimen>
+    <dimen name="layout_padding">8dp</dimen>
+
+    <!--Drawer Dimensions-->
+    <dimen name="drawerImageSize">30dp</dimen>
+    <dimen name="drawerTextSize">20dp</dimen>
+    <dimen name="drawerTextHeight">32dp</dimen>
+    <dimen name="drawerMarginTop">5dp</dimen>
+    <dimen name="drawerImageMargin">16dp</dimen>
+    <dimen name="drawerTextMargin">10dp</dimen>
+    <dimen name="drawerWidth">250dp</dimen>
+    <!--Content Sizes-->
+    <dimen name="contentPrimary">16sp</dimen>
+    <dimen name="contentSecondary">12sp</dimen>
+    <dimen name="contentDefault">14sp</dimen>
+    <!--Dialog Sizes-->
+    <dimen name="dlgCornerRadius">10dp</dimen>
+    <dimen name="dlgPadding">5dp</dimen>
+    <dimen name="dlgStroke">1dp</dimen>
+
+</resources>
