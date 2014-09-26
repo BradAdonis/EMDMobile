@@ -37,7 +37,7 @@ public class splashScreen extends Activity implements asyncTaskCompleteListner{
             }
         }, SPLASH_TIME_OUT);*/
 
-        PreferenceManager.setDefaultValues(this,R.xml.preferences,true);
+        PreferenceManager.setDefaultValues(this,R.xml.preferences,false);
         getUserDetails();
     }
 

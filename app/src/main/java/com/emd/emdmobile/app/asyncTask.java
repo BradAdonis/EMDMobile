@@ -139,13 +139,13 @@ public class asyncTask extends AsyncTask<String, String, String> {
                     }
                 }
                 else if(sqlMethod == asyncSQLMethod.Refresh){
-                    s.deleteObject(obj);
                     if(listObj.size() > 0){
                         for(int i = 0; i < listObj.size(); i++){
                             sqlObject o = listObj.get(i);
-                            long index = s.insertObject(o);
-                            result = String.valueOf(index);
-                            sqlID = index;
+                            long idel = s.deleteObject(o);
+                            long iins = s.insertObject(o);
+                            result = String.valueOf(iins);
+                            sqlID = iins;
                         }
                     }
                 }

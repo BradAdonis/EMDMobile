@@ -1,7 +1,14 @@
 package com.emd.emdmobile.app;
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -86,7 +93,7 @@ public class emdSession implements Serializable {
     }
 
     public String getPatientUrl(String modDate){
-        String url = webDetails.Protocol + "://" + webDetails.Server + "/" + webDetails.Sys + "/database/patient/" + getDB() + "?mod=" + modDate;
+        String url = webDetails.Protocol + "://" + webDetails.Server + "/" + webDetails.Sys + "/database/patient/" + getDB() + "?moddate=" + modDate;
         return url;
     }
 
@@ -111,5 +118,31 @@ public class emdSession implements Serializable {
         webDetails.Sys = pm.getString("pref_key_comm_method",null);
         patientModifiedDate = pm.getString("pref_key_ui_patmod",null);
         claimModifiedDate = pm.getString("pref_key_ui_claimmod",null);
+    }
+
+    public void setPatientModifiedDate(Activity a, String ModDate){
+        SharedPreferences pm = PreferenceManager.getDefaultSharedPreferences(a);
+        SharedPreferences.Editor edt = pm.edit();
+        edt.putString("pref_key_ui_patmod",ModDate);
+        edt.commit();
+    }
+
+    public void ShowNotification(Activity a, String Title, String Message){
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(a.getApplicationContext())
+                                            .setSmallIcon(R.drawable.ic_launcher)
+                                            .setContentTitle(Title)
+                                            .setContentText(Message);
+
+        Intent resultIntent = new Intent(a,splashScreen.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(a);
+        stackBuilder.addParentStack(splashScreen.class);
+        stackBuilder.addNextIntent(resultIntent);
+
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        mBuilder.setContentIntent(resultPendingIntent);
+
+        NotificationManager mNotificationManager = (NotificationManager)a.getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(0, mBuilder.build());
     }
 }

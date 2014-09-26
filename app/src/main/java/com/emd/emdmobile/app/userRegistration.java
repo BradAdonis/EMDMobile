@@ -79,10 +79,12 @@ public class userRegistration extends Activity implements asyncTaskCompleteListn
                 showPracticeDetails(false);
             } else {
                 showPracticeDetails(true);
+                createSearchDialog();
             }
         }
         else{
             showPracticeDetails(true);
+            createSearchDialog();
         }
 
         Button btnSave = (Button)findViewById(R.id.btnSave);

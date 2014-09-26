@@ -19,13 +19,13 @@
     <string name="appUIListLimitDefaults">100</string>
     <string name="appUIListLimitDescription">Number of list entries to display</string>
     <string name="appUIPatientModifiedSince">Patients Modified Since</string>
-    <string name="appUIPatientModifiedSinceDescription">Last date since patients modified YYYY/MM/DD</string>
-    <string name="appUIPatientModifiedSinceHelp">YYYY/MM/DD</string>
-    <string name="appUIPatientModifiedSinceDefault">1900/01/01</string>
+    <string name="appUIPatientModifiedSinceDescription">Last date since patients modified YYYY-MM-DD</string>
+    <string name="appUIPatientModifiedSinceHelp">YYYY-MM-DD</string>
+    <string name="appUIPatientModifiedSinceDefault">1900-01-01</string>
     <string name="appUIClaimModifiedSince">Claims Modified Since</string>
-    <string name="appUIClaimModifiedSinceDescription">Last date since claims modified YYYY/MM/DD</string>
-    <string name="appUIClaimModifiedSinceHelp">YYYY/MM/DD</string>
-    <string name="appUIClaimModifiedSinceDefault">1900/01/01</string>
+    <string name="appUIClaimModifiedSinceDescription">Last date since claims modified YYYY-MM-DD</string>
+    <string name="appUIClaimModifiedSinceHelp">YYYY-MM-DD</string>
+    <string name="appUIClaimModifiedSinceDefault">1900-01-01</string>
     <string name="appUIQueryFrequency">Fetch data frequency</string>
     <string name="appUIQueryFrequenceDescription">Frequency at which new data is fetched from the cloud in minutes</string>
     <string name="appUIQueryFrequencyDefaults">120</string>
@@ -58,6 +58,7 @@
     <string name="action_settings">Preferences</string>
     <string name="action_register">Register</string>
     <string name="action_search">Search</string>
+    <string name="action_refresh">Refresh</string>
     <string name="hello_world">Hello world!</string>
     <!-- Web Service Strings -->
     <string name="webserverprotocol">http://</string>

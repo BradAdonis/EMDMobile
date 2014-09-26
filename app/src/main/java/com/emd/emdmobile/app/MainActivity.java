@@ -37,6 +37,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -310,12 +312,13 @@ public class MainActivity extends Activity
                         s.setJson(userObject.toString());
                         s.setType(JsonPatient);
                         try {
-                            DateFormat df = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
+                            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                             s.setModDate(df.parse(p.LastModified));
                         }catch(ParseException d){}
                         s.setUnid(p.Identifier);
                         s.setKeywords("[" + p.FirstName.toLowerCase() + ";" + p.LastName.toLowerCase() + ";" + p.AccountNumber.toLowerCase() + "]");
                         objList.add(s);
+
                         /*Patients.add(p);
                         patientsID[i] = p.Identifier;*/
                     }
@@ -334,6 +337,19 @@ public class MainActivity extends Activity
                     a.setSqlObjects(objList);
                     a.execute("");
                 }
+
+                Date today = Calendar.getInstance().getTime();
+                DateFormat sdt = new SimpleDateFormat("yyyy-MM-dd");
+                clientSession.setPatientModifiedDate(this, sdt.format(today));
+
+                if(objList.size() > 0) {
+                    clientSession.ShowNotification(this, "Patients Modified/Added", objList.size() + " patients have been modified / added to the database.");
+                }
+                else
+                {
+                    clientSession.ShowNotification(this, "Patients Modified/Added", "No patient modifications have been found.");
+                }
+
 
                /* FragmentManager fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.container, patientlistFragment.newInstance(Patients,patientsID)).commit();*/
@@ -412,6 +428,7 @@ public class MainActivity extends Activity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        clientSession.initPreferences(this);
 
         switch(id){
             case R.id.action_settings:

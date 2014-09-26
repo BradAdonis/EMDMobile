@@ -14,9 +14,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Bradl_000 on 2014-07-30.
- */
 public class sqlDataSource {
     private SQLiteDatabase db;
     private sqlDatabase dbHelper;
@@ -44,7 +41,7 @@ public class sqlDataSource {
     public long insertObject(sqlObject obj){
         ContentValues values = new ContentValues();
         values.put(sqlDatabase.COLUMN_UNID, obj.getUnid());
-        values.put(sqlDatabase.COLUMN_MODDATE, obj.getModDate().toString());
+        values.put(sqlDatabase.COLUMN_MODDATE, obj.getModDate());
         values.put(sqlDatabase.COLUMN_TYPE, obj.getType());
         values.put(sqlDatabase.COLUMN_KEYWORDS, obj.getKeywords());
         values.put(sqlDatabase.COLUMN_JSON, obj.getJson());
@@ -104,15 +101,15 @@ public class sqlDataSource {
 
         switch(argCount){
             case 0:
-                cursor = db.query(sqlDatabase.TABLE_OBJECT, allColumns, null,null,null,null,null,listLimits);
+                cursor = db.query(sqlDatabase.TABLE_OBJECT, allColumns, null,null,null,null, sqlDatabase.COLUMN_MODDATE + " DESC",listLimits);
                 break;
 
             case 1:
-                cursor = db.query(sqlDatabase.TABLE_OBJECT, allColumns, sqlDatabase.COLUMN_TYPE + " = ?", argsarray, null, null, null,listLimits);
+                cursor = db.query(sqlDatabase.TABLE_OBJECT, allColumns, sqlDatabase.COLUMN_TYPE + " = ?", argsarray, null, null, sqlDatabase.COLUMN_MODDATE + " DESC",listLimits);
                 break;
 
             case 2:
-                cursor = db.query(sqlDatabase.TABLE_OBJECT, allColumns, sqlDatabase.COLUMN_TYPE + " = ? and " + sqlDatabase.COLUMN_KEYWORDS + " LIKE ?", argsarray, null, null, null,listLimits);
+                cursor = db.query(sqlDatabase.TABLE_OBJECT, allColumns, sqlDatabase.COLUMN_TYPE + " = ? and " + sqlDatabase.COLUMN_KEYWORDS + " LIKE ?", argsarray, null, null, sqlDatabase.COLUMN_MODDATE + " DESC",listLimits);
                 break;
         }
 

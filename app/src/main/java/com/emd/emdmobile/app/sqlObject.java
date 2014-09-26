@@ -1,5 +1,7 @@
 package com.emd.emdmobile.app;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -29,8 +31,16 @@ public class sqlObject {
         this.unid = unid;
     }
 
-    public Date getModDate(){
-        return moddate;
+    public String getModDate(){
+        if(moddate != null) {
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            String date = df.format(moddate);
+            return date;
+        }
+        else
+        {
+            return "1900-01-01";
+        }
     }
 
     public void setModDate(Date moddate){
