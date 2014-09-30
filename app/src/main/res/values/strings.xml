@@ -102,5 +102,18 @@
     <string name="patientContact">0832582085</string>
     <string name="patientAddress">28 Rove Park Gardens Parkrand</string>
     <string name="title_activity_web_view">webViewActivity</string>
-
+    <!--Claim Item List-->
+    <string name="claimPatientName">Bradley Cunningham</string>
+    <string name="claimMedicalAid">Discovery</string>
+    <string name="claimMedicalOption">Classic Saver</string>
+    <string name="claimVisitDate">1900-01-01</string>
+    <string name="claimTotalCharged">200.00</string>
+    <string name="claimTotalMedicalCharged">100.00</string>
+    <string name="claimTotalPatientCharged">100.00</string>
+    <string name="claimTotalOutstanding">100.00</string>
+    <string name="claimICD">Other general examinations</string>
+    <string name="claimTotalHeader">Tot</string>
+    <string name="claimMedAidHeader">Med</string>
+    <string name="claimPatHeader">Pat</string>
+    <string name="claimOutHeader">Out</string>
 </resources>

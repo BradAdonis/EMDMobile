@@ -97,6 +97,11 @@ public class emdSession implements Serializable {
         return url;
     }
 
+    public String getClaimURL(String modDate){
+        String url = webDetails.Protocol + "://" + webDetails.Server + "/" + webDetails.Sys + "/database/claim/" + getDB() + "?moddate=" + modDate;
+        return url;
+    }
+
     public void showToast(Activity a,String Message){
         LayoutInflater inflator = a.getLayoutInflater();
         View layout = inflator.inflate(R.layout.custom_toast, (ViewGroup) a.findViewById(R.id.toast_layout_root));
