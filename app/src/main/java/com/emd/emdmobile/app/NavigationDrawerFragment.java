@@ -122,12 +122,16 @@ public class NavigationDrawerFragment extends Fragment {
         ));*/
 
         //New Custom Item List with Images and text
+        //String[] itemList = {
+        //  "Patients", "Claims", "Med Aid Outstanding", "Totals Monthly", "Patient Liable", "Liability", "Med Aid by Month", "Patient by Month", "Accounting Report",
+        //};
+
         String[] itemList = {
-          "Patients", "Claims", "Med Aid Outstanding", "Totals Monthly", "Patient Liable", "Liability", "Med Aid by Month", "Patient by Month", "Accounting Report",
+                "Patients", "Claims"
         };
 
         Integer[] itemImages = {
-          R.drawable.ic_patient, R.drawable.ic_claims, R.drawable.ic_report, R.drawable.ic_report, R.drawable.ic_report, R.drawable.ic_report, R.drawable.ic_remit, R.drawable.ic_remit, R.drawable.ic_remit,
+          R.drawable.ic_patient, R.drawable.ic_claims
         };
 
         drawerItemList adapter = new drawerItemList(this.getActivity(), itemList, itemImages);

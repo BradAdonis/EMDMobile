@@ -112,8 +112,8 @@
     <string name="claimTotalPatientCharged">100.00</string>
     <string name="claimTotalOutstanding">100.00</string>
     <string name="claimICD">Other general examinations</string>
-    <string name="claimTotalHeader">Tot</string>
-    <string name="claimMedAidHeader">Med</string>
-    <string name="claimPatHeader">Pat</string>
-    <string name="claimOutHeader">Out</string>
+    <string name="claimTotalHeader">Total</string>
+    <string name="claimMedAidHeader">MedAid</string>
+    <string name="claimPatHeader">Patient</string>
+    <string name="claimOutHeader">Outstanding</string>
 </resources>

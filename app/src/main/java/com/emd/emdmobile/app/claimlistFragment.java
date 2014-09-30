@@ -26,23 +26,27 @@ import java.util.ArrayList;
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
  */
-public class patientlistFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class claimlistFragment extends Fragment implements AbsListView.OnItemClickListener {
 
-    private static final String ARG_PARAM1 = "patientList";
-    private static final String ARG_PARAM2 = "patientListIDs";
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "claimList";
+    private static final String ARG_PARAM2 = "claimListIDs";
 
-    private ArrayList<patientDetails> Patients;
-    private String[] patientsID;
+    // TODO: Rename and change types of parameters
+    private ArrayList<claimDetails> Claims;
+    private String[] claimsID;
 
     private OnFragmentInteractionListener mListener;
     private AbsListView mListView;
+    private ListAdapter mAdapter;
 
     // TODO: Rename and change types of parameters
-    public static patientlistFragment newInstance(ArrayList<patientDetails> Patients, String[] patientsID) {
-        patientlistFragment fragment = new patientlistFragment();
+    public static claimlistFragment newInstance(ArrayList<claimDetails> Claims, String[] claimIDs) {
+        claimlistFragment fragment = new claimlistFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_PARAM1,Patients);
-        args.putSerializable(ARG_PARAM2,patientsID);
+        args.putSerializable(ARG_PARAM1, Claims);
+        args.putSerializable(ARG_PARAM2, claimIDs);
         fragment.setArguments(args);
         return fragment;
     }
@@ -51,7 +55,7 @@ public class patientlistFragment extends Fragment implements AbsListView.OnItemC
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public patientlistFragment() {
+    public claimlistFragment() {
     }
 
     @Override
@@ -59,21 +63,22 @@ public class patientlistFragment extends Fragment implements AbsListView.OnItemC
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            Patients = (ArrayList<patientDetails>)getArguments().getSerializable(ARG_PARAM1);
-            patientsID = (String[])getArguments().getSerializable(ARG_PARAM2);
+            Claims = (ArrayList<claimDetails>)getArguments().getSerializable(ARG_PARAM1);
+            claimsID = (String[])getArguments().getSerializable(ARG_PARAM2);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_patientlist, container, false);
+        View view = inflater.inflate(R.layout.fragment_claimlist, container, false);
 
         // Set the adapter
         mListView = (AbsListView) view.findViewById(android.R.id.list);
-        patientItemList adapter = new patientItemList(this.getActivity(),Patients,patientsID);
+        claimItemList adapter = new claimItemList(this.getActivity(), Claims, claimsID);
         mListView.setAdapter(adapter);
         mListView.setOnItemClickListener(this);
+
         return view;
     }
 
@@ -100,9 +105,9 @@ public class patientlistFragment extends Fragment implements AbsListView.OnItemC
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            String Identifier = patientsID[position];
-            mListener.onFragmentInteraction("patient",Identifier);
-            //mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+
+            String identifier = claimsID[position];
+            mListener.onFragmentInteraction("claim",identifier);
         }
     }
 

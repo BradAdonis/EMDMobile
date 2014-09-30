@@ -132,6 +132,13 @@ public class emdSession implements Serializable {
         edt.commit();
     }
 
+    public void setClaimModifiedDate(Activity a, String ModDate){
+        SharedPreferences pm = PreferenceManager.getDefaultSharedPreferences(a);
+        SharedPreferences.Editor edt = pm.edit();
+        edt.putString("pref_key_ui_claimmod",ModDate);
+        edt.commit();
+    }
+
     public void ShowNotification(Activity a, String Title, String Message){
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(a.getApplicationContext())
                                             .setSmallIcon(R.drawable.ic_launcher)

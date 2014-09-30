@@ -33,9 +33,29 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/txtICD"
+        android:id="@+id/txtClaimMedAid"
         android:layout_toRightOf="@id/imgClaimStatus"
         android:layout_below="@id/txtPatientName"
+        android:layout_margin="@dimen/item_spacing"
+        android:textSize="@dimen/contentSecondary"
+        android:text="@string/claimMedicalAid"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtClaimMedAidOpt"
+        android:layout_toRightOf="@id/txtClaimMedAid"
+        android:layout_below="@id/txtPatientName"
+        android:layout_margin="@dimen/item_spacing"
+        android:textSize="@dimen/contentSecondary"
+        android:text="@string/claimMedicalOption"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtICD"
+        android:layout_toRightOf="@id/imgClaimStatus"
+        android:layout_below="@id/txtClaimMedAid"
         android:layout_margin="@dimen/item_spacing"
         android:textSize="@dimen/contentSecondary"
         android:text="@string/claimICD"/>
@@ -44,6 +64,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txtTotalHeader"
+        android:layout_toRightOf="@id/imgClaimStatus"
         android:layout_below="@id/txtICD"
         android:layout_margin="@dimen/item_spacing"
         android:textSize="@dimen/contentSecondary"
@@ -78,7 +99,7 @@
         android:layout_margin="@dimen/item_spacing"
         android:textSize="@dimen/contentSecondary"
         android:text="@string/claimTotalOutstanding"/>
-
+<!--
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -87,7 +108,8 @@
         android:layout_below="@id/txtICD"
         android:layout_margin="@dimen/item_spacing"
         android:textSize="@dimen/contentSecondary"
-        android:text="@string/claimMedAidHeader"/>
+        android:text="@string/claimMedAidHeader"
+        android:visibility="invisible"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -97,7 +119,8 @@
         android:layout_below="@id/txtICD"
         android:layout_margin="@dimen/item_spacing"
         android:textSize="@dimen/contentSecondary"
-        android:text="@string/claimTotalMedicalCharged"/>
+        android:text="@string/claimTotalMedicalCharged"
+        android:visibility="invisible"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -107,7 +130,8 @@
         android:layout_below="@id/txtICD"
         android:layout_margin="@dimen/item_spacing"
         android:textSize="@dimen/contentSecondary"
-        android:text="@string/claimPatHeader"/>
+        android:text="@string/claimPatHeader"
+        android:visibility="invisible"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -117,7 +141,8 @@
         android:layout_below="@id/txtICD"
         android:layout_margin="@dimen/item_spacing"
         android:textSize="@dimen/contentSecondary"
-        android:text="@string/claimTotalPatientCharged"/>
+        android:text="@string/claimTotalPatientCharged"
+        android:visibility="invisible"/>-->
 
 
 </RelativeLayout>

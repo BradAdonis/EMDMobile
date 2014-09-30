@@ -43,7 +43,7 @@ import java.util.List;
 
 
 public class MainActivity extends Activity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, webView.OnFragmentInteractionListener, patientlistFragment.OnFragmentInteractionListener, asyncTaskCompleteListner {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, webView.OnFragmentInteractionListener, patientlistFragment.OnFragmentInteractionListener, asyncTaskCompleteListner, claimlistFragment.OnFragmentInteractionListener {
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private String mTitle;
@@ -54,8 +54,11 @@ public class MainActivity extends Activity
     private final static String ClientSession = "ClientSession";
     private final static String ActionbarColour = "#012968";
     private final static String JsonPatient = "patient";
-    private final static String MessagePatient = "Getting Database Patients";
-    private final static String JsonErrorPatient = "Error getting patient information";
+    private final static String JsonClaim = "claim";
+    private final static String MessagePatient = "Syncing Patients From Cloud";
+    private final static String MessageClaim = "Syncing Claims From Cloud";
+    private final static String JsonErrorPatient = "No new patient information has been retrieved";
+    private final static String JsonErrorClaim = "No new claim information has been retrieved";
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -144,7 +147,7 @@ public class MainActivity extends Activity
                 break;
             case 2:
                 mTitle = getString(R.string.title_section2);
-                BuildWebFragmentView("mReportsTotalsMonthly");
+                GetSQLDBClaims(null);
                 break;
             case 3:
                 mTitle = getString(R.string.title_section3);
@@ -236,6 +239,22 @@ public class MainActivity extends Activity
         a.execute("");
     }
 
+    private void GetSQLDBClaims(String Keyword){
+        sqlObject o = new sqlObject();
+        o.setType(JsonClaim);
+        if(Keyword != null){
+            o.setKeywords(Keyword);
+        }
+        asyncTask a = new asyncTask(this);
+        a.setClientSession(clientSession);
+        a.setMessage("Retrieving Claim Information");
+        a.setSqlMethod(asyncTask.asyncSQLMethod.Select);
+        a.setAsyncMethod("selectclaims");
+        a.setAsyncSystem(asyncTask.asyncSystem.SqlMethod);
+        a.setSqlObject(o);
+        a.execute("");
+    }
+
     private void GetPracticePatients(){
         asyncTask aTask = new asyncTask(this);
         aTask.setClientSession(clientSession);
@@ -243,6 +262,15 @@ public class MainActivity extends Activity
         aTask.setAsyncMethod(JsonPatient);
         aTask.setMessage(MessagePatient);
         aTask.execute(clientSession.getPatientUrl(clientSession.patientModifiedDate));
+    }
+
+    private void GetPracticeClaims(){
+        asyncTask aTask = new asyncTask(this);
+        aTask.setClientSession(clientSession);
+        aTask.setAsyncSystem(asyncTask.asyncSystem.WebMethod);
+        aTask.setAsyncMethod(JsonClaim);
+        aTask.setMessage(MessageClaim);
+        aTask.execute(clientSession.getClaimURL(clientSession.claimModifiedDate));
     }
 
     private void CreateSearchDialog(String HeaderLabel, final String SearchType){
@@ -269,6 +297,14 @@ public class MainActivity extends Activity
                     }
                     else{
                         GetSQLDBPatients(null);
+                    }
+                }
+                else if(SearchType.contentEquals(JsonClaim)){
+                    if(Keyword.length() > 0){
+                        GetSQLDBClaims(Keyword);
+                    }
+                    else{
+                        GetSQLDBClaims(null);
                     }
                 }
                 searchDialog.dismiss();
@@ -330,7 +366,7 @@ public class MainActivity extends Activity
                     asyncTask a = new asyncTask(this);
                     a.setClientSession(clientSession);
                     a.setAsyncSystem(asyncTask.asyncSystem.SqlMethod);
-                    a.setMessage("Updating Patients Database");
+                    a.setMessage("Updating Patients");
                     a.setAsyncMethod("insertpatient");
                     a.setSqlMethod(asyncTask.asyncSQLMethod.Refresh);
                     a.setSqlObject(o);
@@ -360,6 +396,72 @@ public class MainActivity extends Activity
                 t.show();*/
             }
         }
+        else if(Method == JsonClaim){
+            try
+            {
+                JSONArray claimArray = new JSONArray(result);
+                List<sqlObject> objList = new ArrayList<sqlObject>();
+
+                /*String[] patientsID = new String[userArray.length()];
+                ArrayList<patientDetails> Patients = new ArrayList<patientDetails>(userArray.length());*/
+
+                for(int i = 0; i < claimArray.length(); i++){
+                    JSONObject userObject = new JSONObject(claimArray.get(i).toString());
+                    Gson g = new Gson();
+                    claimDetails c = g.fromJson(userObject.toString(),claimDetails.class);
+                    if(c != null){
+                        sqlObject s = new sqlObject();
+                        s.setJson(userObject.toString());
+                        s.setType(JsonClaim);
+                        try {
+                            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                            s.setModDate(df.parse(c.LastModified));
+                            }catch(ParseException d){}
+                            s.setUnid(c.Identifier);
+                            s.setKeywords("[" + c.Patient.toLowerCase() + ";" + c.ICDDescr.toLowerCase() + ";" + c.MedicalAid.toLowerCase() + ";" + c.MedicalAidOption + "]");
+                            objList.add(s);
+
+                        /*Patients.add(p);
+                        patientsID[i] = p.Identifier;*/
+                    }
+                }
+
+                if(objList.size() > 0){
+                    sqlObject o = new sqlObject();
+                    o.setType(JsonClaim);
+                    asyncTask a = new asyncTask(this);
+                    a.setClientSession(clientSession);
+                    a.setAsyncSystem(asyncTask.asyncSystem.SqlMethod);
+                    a.setMessage("Updating Claims");
+                    a.setAsyncMethod("insertclaim");
+                    a.setSqlMethod(asyncTask.asyncSQLMethod.Refresh);
+                    a.setSqlObject(o);
+                    a.setSqlObjects(objList);
+                    a.execute("");
+                    }
+
+                    Date today = Calendar.getInstance().getTime();
+                    DateFormat sdt = new SimpleDateFormat("yyyy-MM-dd");
+                    clientSession.setClaimModifiedDate(this, sdt.format(today));
+
+                    if(objList.size() > 0) {
+                        clientSession.ShowNotification(this, "Claims Modified/Added", objList.size() + " claims have been modified / added to the database.");
+                    }
+                    else
+                    {
+                        clientSession.ShowNotification(this, "Claims Modified/Added", "No claim modifications have been found.");
+                    }
+
+
+               /* FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.container, patientlistFragment.newInstance(Patients,patientsID)).commit();*/
+            }
+            catch(JSONException e){
+                clientSession.showToast(MainActivity.this,JsonErrorClaim);
+                /*Toast t = Toast.makeText(getApplicationContext(),JsonErrorPatient,Toast.LENGTH_LONG);
+                t.show();*/
+                }
+            }
     }
 
     @Override
@@ -388,12 +490,33 @@ public class MainActivity extends Activity
             FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.container, patientlistFragment.newInstance(Patients,patientsID)).commit();
         }
+
+        if(Method.contentEquals("selectclaims")){
+            String[] claimsID = new String[objs.size()];
+            ArrayList<claimDetails> Claims = new ArrayList<claimDetails>(objs.size());
+
+            for(int i = 0; i < objs.size(); i++){
+                Gson g = new Gson();
+                sqlObject o = objs.get(i);
+                claimDetails c = g.fromJson(o.getJson(),claimDetails.class);
+
+                if(c != null){
+                    Claims.add(c);
+                    claimsID[i] = c.Identifier;
+                }
+            }
+
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.container, claimlistFragment.newInstance(Claims,claimsID)).commit();
+        }
     }
 
     @Override
     public void onSqlNonSelectTaskComplete(String Method, long i){
         if(Method.contentEquals("insertpatient")){
             GetSQLDBPatients(null);
+        }else if(Method.contentEquals("insertclaim")){
+            GetSQLDBClaims(null);
         }
     }
 
@@ -404,15 +527,22 @@ public class MainActivity extends Activity
     @Override
     public void onFragmentInteraction(String Function,String id){
 
+        String Url = "";
+
         if(Function.contentEquals(JsonPatient)){
-            String Url = clientSession.getDBUrlDocument("mPatients",id);
-            clientSession.currentURL = Url;
-            Bundle b = new Bundle();
-            b.putSerializable(ClientSession,clientSession);
-            Intent i = new Intent(this,webViewActivity.class);
-            i.putExtras(b);
-            startActivity(i);
+            Url = clientSession.getDBUrlDocument("mPatients",id);
         }
+
+        if(Function.contentEquals(JsonClaim)){
+            Url = clientSession.getDBUrlDocument("mClaims",id);
+        }
+
+        clientSession.currentURL = Url;
+        Bundle b = new Bundle();
+        b.putSerializable(ClientSession,clientSession);
+        Intent i = new Intent(this,webViewActivity.class);
+        i.putExtras(b);
+        startActivity(i);
     }
 
     @Override
@@ -444,12 +574,20 @@ public class MainActivity extends Activity
                 startActivity(i);
                 break;
             case R.id.action_refresh:
-                GetPracticePatients();
+                if(mTitle.contentEquals("Claims")){
+                    GetPracticeClaims();
+                }
+                else if(mTitle.contentEquals("Patients")){
+                    GetPracticePatients();
+                }
                 break;
             case R.id.action_bar_search:
                 if(mTitle.contentEquals("Patients")){
                     CreateSearchDialog("Patient Search",JsonPatient);
                 }
+                else if(mTitle.contentEquals("Claims")){
+                    CreateSearchDialog("Claim Search",JsonClaim);
+                };
         }
 
         return super.onOptionsItemSelected(item);

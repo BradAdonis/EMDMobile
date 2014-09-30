@@ -34,15 +34,18 @@ public class claimItemList extends ArrayAdapter<String> {
 
         ImageView imgStatus = (ImageView)rowView.findViewById(R.id.imgClaimStatus);
         TextView txtPatient = (TextView) rowView.findViewById(R.id.txtPatientName);
-        TextView txtVisDate = (TextView) rowView.findViewById(R.id.txtICD);
+        TextView txtVisDate = (TextView) rowView.findViewById(R.id.txtVisitDate);
+        TextView txtICDDescr = (TextView) rowView.findViewById(R.id.txtICD);
         TextView txtTotalCharged = (TextView) rowView.findViewById(R.id.txtTotalCharged);
         TextView txtOutstanding = (TextView) rowView.findViewById(R.id.txtOutstanding);
-        TextView txtPatientCharged = (TextView) rowView.findViewById(R.id.txtPatientCharged);
-        TextView txtMedicalCharged = (TextView) rowView.findViewById(R.id.txtMedicalAidCharged);
+        //TextView txtPatientCharged = (TextView) rowView.findViewById(R.id.txtPatientCharged);
+        //TextView txtMedicalCharged = (TextView) rowView.findViewById(R.id.txtMedicalAidCharged);
+        TextView txtMedicalAid = (TextView) rowView.findViewById(R.id.txtClaimMedAid);
+        TextView txtMedicalAidOption = (TextView) rowView.findViewById(R.id.txtClaimMedAidOpt);
 
         claimDetails c = Claims.get(position);
 
-        if(c.TotalOutstanding == "0"){
+        if(c.TotalOutstanding.contentEquals("0")){
             imgStatus.setImageResource(R.drawable.ic_action_approve);
         }
         else{
@@ -52,9 +55,12 @@ public class claimItemList extends ArrayAdapter<String> {
         txtPatient.setText(c.Patient);
         txtVisDate.setText(c.VisitDate);
         txtTotalCharged.setText(c.TotalCharged);
-        txtOutstanding.setText(c.TotalPatientCharged);
-        txtMedicalCharged.setText(c.TotalMedicalAidCharged);
-        txtPatientCharged.setText(c.TotalPatientCharged);
+        txtOutstanding.setText(c.TotalOutstanding);
+        //txtMedicalCharged.setText(c.TotalMedicalAidCharged);
+        //txtPatientCharged.setText(c.TotalPatientCharged);
+        txtICDDescr.setText(c.ICDDescr);
+        txtMedicalAid.setText(c.MedicalAid);
+        txtMedicalAidOption.setText(c.MedicalAidOption);
 
         return rowView;
     }
