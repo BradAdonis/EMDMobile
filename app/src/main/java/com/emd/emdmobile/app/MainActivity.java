@@ -186,8 +186,8 @@ public class MainActivity extends Activity
 
     private void RefreshAll()
     {
-        GetPracticeClaims(false);
         GetPracticePatients(false);
+        GetPracticeClaims(false);
     }
 
     private void setupSchedule(){
