@@ -40,11 +40,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 
 public class MainActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks, webView.OnFragmentInteractionListener, patientlistFragment.OnFragmentInteractionListener, asyncTaskCompleteListner, claimlistFragment.OnFragmentInteractionListener {
 
+    private ScheduledExecutorService scheduleTask;
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private String mTitle;
     private int mPosition = 0;
@@ -52,7 +56,6 @@ public class MainActivity extends Activity
     private static final String NAV_TITLE = "navigationTitle";
     private emdSession clientSession;
     private final static String ClientSession = "ClientSession";
-    private final static String ActionbarColour = "#012968";
     private final static String DateFormat = "yyyy-MM-dd";
 
     private final static String MessagePatient = "Syncing Patients From Cloud";
@@ -70,6 +73,7 @@ public class MainActivity extends Activity
     private final static String JsonClaim = "claim";
     private final static String JsonClaimSelect = "selectclaims";
     private final static String JsonClaimInsert = "insertclaim";
+    private final static String JsonAll = "all";
 
     private final static String WebPagePatientForm = "mPatients";
     private final static String WebPageClaimForm = "mPatients";
@@ -107,6 +111,7 @@ public class MainActivity extends Activity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
+        setupSchedule();
     }
 
     @Override
@@ -138,6 +143,8 @@ public class MainActivity extends Activity
     protected void onResume()
     {
         clientSession.initPreferences(this);
+        scheduleTask.shutdown();
+        setupSchedule();
         super.onResume();
     }
 
@@ -157,29 +164,47 @@ public class MainActivity extends Activity
 
     //region WEB ASYNC TASKS
 
-    private void GetPracticePatients(){
+    private void GetPracticePatients(boolean ShowProgress){
         asyncTask aTask = new asyncTask(this);
         aTask.setClientSession(clientSession);
         aTask.setAsyncSystem(asyncTask.asyncSystem.WebMethod);
         aTask.setAsyncMethod(JsonPatient);
         aTask.setMessage(MessagePatient);
+        aTask.setShowProgress(ShowProgress);
         aTask.execute(clientSession.getPatientUrl(clientSession.patientModifiedDate));
     }
 
-    private void GetPracticeClaims(){
+    private void GetPracticeClaims(boolean ShowProgress){
         asyncTask aTask = new asyncTask(this);
         aTask.setClientSession(clientSession);
         aTask.setAsyncSystem(asyncTask.asyncSystem.WebMethod);
         aTask.setAsyncMethod(JsonClaim);
         aTask.setMessage(MessageClaim);
+        aTask.setShowProgress(ShowProgress);
         aTask.execute(clientSession.getClaimURL(clientSession.claimModifiedDate));
+    }
+
+    private void RefreshAll()
+    {
+        GetPracticeClaims(false);
+        GetPracticePatients(false);
+    }
+
+    private void setupSchedule(){
+        scheduleTask = Executors.newScheduledThreadPool(5);
+        scheduleTask.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                RefreshAll();
+            }
+        },clientSession.refreshFrequency,clientSession.refreshFrequency, TimeUnit.MINUTES);
     }
 
     //endregion
 
     //region RENDER JSON
 
-    private void CreateJsonPatient(String result){
+    private void CreateJsonPatient(String result, boolean showProgress){
         List<sqlObject> objList = new ArrayList<sqlObject>();
 
         try
@@ -205,7 +230,9 @@ public class MainActivity extends Activity
             }
         }
         catch(JSONException e){
-            clientSession.showToast(MainActivity.this,JsonErrorPatient);
+            if(showProgress == true) {
+                clientSession.showToast(MainActivity.this, JsonErrorPatient);
+            }
         }
 
         if(objList.size() > 0){
@@ -219,6 +246,7 @@ public class MainActivity extends Activity
             a.setSqlMethod(asyncTask.asyncSQLMethod.Refresh);
             a.setSqlObject(o);
             a.setSqlObjects(objList);
+            a.setShowProgress(showProgress);
             a.execute("");
         }
 
@@ -235,7 +263,7 @@ public class MainActivity extends Activity
         }
     }
 
-    private void CreateJsonClaim(String result){
+    private void CreateJsonClaim(String result, boolean showProgress){
 
         List<sqlObject> objList = new ArrayList<sqlObject>();
 
@@ -270,10 +298,9 @@ public class MainActivity extends Activity
             }
         }
         catch(JSONException e){
-            clientSession.showToast(MainActivity.this,JsonErrorClaim);
-        }
-        catch(Exception e){
-            clientSession.showToast(MainActivity.this, e.getMessage());
+            if(showProgress == true) {
+                clientSession.showToast(MainActivity.this, JsonErrorClaim);
+            }
         }
 
         if(objList.size() > 0){
@@ -287,6 +314,7 @@ public class MainActivity extends Activity
             a.setSqlMethod(asyncTask.asyncSQLMethod.Refresh);
             a.setSqlObject(o);
             a.setSqlObjects(objList);
+            a.setShowProgress(showProgress);
             a.execute("");
         }
 
@@ -529,14 +557,17 @@ public class MainActivity extends Activity
     //region ASYNC TASKS
 
     @Override
-    public void onWebTaskComplete(String Method, String result){
-        if(Method == JsonPatient){
+    public void onWebTaskComplete(asyncTask a){
+        if(a.getMethod() == JsonPatient){
 
-            CreateJsonPatient(result);
+            CreateJsonPatient(a.getResult(), a.getShowProgress());
         }
-        else if(Method == JsonClaim){
+        else if(a.getMethod() == JsonClaim){
 
-           CreateJsonClaim(result);
+           CreateJsonClaim(a.getResult(), a.getShowProgress());
+        }
+        else if (a.getMethod() == JsonAll){
+
         }
     }
 
@@ -544,22 +575,24 @@ public class MainActivity extends Activity
     public void onDominoTaskComplete(boolean result){}
 
     @Override
-    public void onSqlSelectTaskComplete(String Method, List<sqlObject> objs){
-        if(Method.contentEquals(JsonPatientSelect)){
-            CreateUIPatientControls(objs);
+    public void onSqlSelectTaskComplete(asyncTask a){
+        if(a.getMethod().contentEquals(JsonPatientSelect)){
+            CreateUIPatientControls(a.getSqlList());
         }
 
-        if(Method.contentEquals(JsonClaimSelect)){
-            CreateUIClaimControls(objs);
+        if(a.getMethod().contentEquals(JsonClaimSelect)){
+            CreateUIClaimControls(a.getSqlList());
         }
     }
 
     @Override
-    public void onSqlNonSelectTaskComplete(String Method, long i){
-        if(Method.contentEquals(JsonPatientInsert)){
-            GetSQLDBPatients(null);
-        }else if(Method.contentEquals(JsonClaimInsert)){
-            GetSQLDBClaims(null);
+    public void onSqlNonSelectTaskComplete(asyncTask a){
+        if(a.getShowProgress() == true) {
+            if (a.getMethod().contentEquals(JsonPatientInsert)) {
+                GetSQLDBPatients(null);
+            } else if (a.getMethod().contentEquals(JsonClaimInsert)) {
+                GetSQLDBClaims(null);
+            }
         }
     }
 
@@ -607,29 +640,29 @@ public class MainActivity extends Activity
         int id = item.getItemId();
         clientSession.initPreferences(this);
 
-        if(id == R.id.action_settings)
-        {
-            Bundle b = new Bundle();
-            b.putSerializable(ClientSession,clientSession);
-            Intent i = new Intent(MainActivity.this, Settings.class);
-            i.putExtras(b);
-            startActivity(i);
-        }
-        else{
             switch(id){
+
+                case R.id.action_settings:
+                    Bundle bSettings = new Bundle();
+                    bSettings.putSerializable(ClientSession,clientSession);
+                    Intent iSettings = new Intent(MainActivity.this, Settings.class);
+                    iSettings.putExtras(bSettings);
+                    startActivity(iSettings);
+                    break;
+
                 case R.id.action_password:
-                    Bundle b = new Bundle();
-                    b.putSerializable(ClientSession,clientSession);
-                    Intent i = new Intent(MainActivity.this, userRegistration.class);
-                    i.putExtras(b);
-                    startActivity(i);
+                    Bundle bPassword = new Bundle();
+                    bPassword.putSerializable(ClientSession,clientSession);
+                    Intent iPassword = new Intent(MainActivity.this, userRegistration.class);
+                    iPassword.putExtras(bPassword);
+                    startActivity(iPassword);
                     break;
                 case R.id.action_refresh:
-                    if(mTitle.contentEquals(PageTitleClaims)){
-                        GetPracticeClaims();
+                   if(mTitle.contentEquals(PageTitleClaims)){
+                        GetPracticeClaims(true);
                     }
                     else if(mTitle.contentEquals(PageTitlePatients)){
-                        GetPracticePatients();
+                        GetPracticePatients(true);
                     }
                     break;
                 case R.id.action_bar_search:
@@ -641,7 +674,6 @@ public class MainActivity extends Activity
                     };
                     break;
             }
-        }
 
         return super.onOptionsItemSelected(item);
     }

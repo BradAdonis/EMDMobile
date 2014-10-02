@@ -127,7 +127,7 @@ public class splashScreen extends Activity implements asyncTaskCompleteListner{
     }
 
     @Override
-    public void onWebTaskComplete(String method,String result){
+    public void onWebTaskComplete(asyncTask a){
 
     }
 
@@ -147,12 +147,12 @@ public class splashScreen extends Activity implements asyncTaskCompleteListner{
     }
 
     @Override
-    public void onSqlSelectTaskComplete(String Method, List<sqlObject> objs){
+    public void onSqlSelectTaskComplete(asyncTask a){
 
     }
 
     @Override
-    public void onSqlNonSelectTaskComplete(String Method, long i){
+    public void onSqlNonSelectTaskComplete(asyncTask a){
 
     }
 }

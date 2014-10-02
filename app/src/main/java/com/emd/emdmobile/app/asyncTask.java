@@ -40,10 +40,20 @@ public class asyncTask extends AsyncTask<String, String, String> {
     private String Method = "";
     private asyncSQLMethod sqlMethod;
     private String sqlWhere = "";
+    private String Result = "";
+    private boolean ShowProgress = true;
 
     public asyncTask(Activity activity){
         this.callBack = (asyncTaskCompleteListner) activity;
         this.a = activity;
+    }
+
+    public void setShowProgress(boolean progress){
+        this.ShowProgress = progress;
+    }
+
+    public boolean getShowProgress(){
+        return this.ShowProgress;
     }
 
     public void setAsyncSystem(asyncSystem aSystem){
@@ -56,6 +66,18 @@ public class asyncTask extends AsyncTask<String, String, String> {
 
     public void setMessage(String Message){
         this.Message = Message;
+    }
+
+    public String getMessage(){
+        return this.Message;
+    }
+
+    public String getMethod(){
+        return this.Method;
+    }
+
+    public String getResult(){
+        return this.Result;
     }
 
     public void setClientSession(emdSession clientSession){
@@ -78,12 +100,21 @@ public class asyncTask extends AsyncTask<String, String, String> {
         sqlMethod = m;
     }
 
+    public List<sqlObject> getSqlList()
+    {
+        return this.listObj;
+    }
+
 
     @Override
     protected void onPreExecute(){
         super.onPreExecute();
-        if(Message != null) {
-            loadingDialog = ProgressDialog.show(a, "Working", Message);
+
+        if(ShowProgress == false){}
+        else{
+            if(Message != null) {
+                loadingDialog = ProgressDialog.show(a, "Working", Message);
+            }
         }
     }
 
@@ -165,9 +196,11 @@ public class asyncTask extends AsyncTask<String, String, String> {
     protected void onPostExecute(String Result){
         super.onPostExecute(Result);
 
+        this.Result = Result;
+
         try{
             if(aSystem == asyncSystem.WebMethod){
-                callBack.onWebTaskComplete(this.Method,Result);
+                callBack.onWebTaskComplete(this);
             }
 
             if(aSystem == asyncSystem.DominoAuth){
@@ -176,10 +209,10 @@ public class asyncTask extends AsyncTask<String, String, String> {
 
             if(aSystem == asyncSystem.SqlMethod){
                 if(sqlMethod == asyncSQLMethod.Select){
-                    callBack.onSqlSelectTaskComplete(Method,listObj);
+                    callBack.onSqlSelectTaskComplete(this);
                 }
                 else{
-                    callBack.onSqlNonSelectTaskComplete(Method,sqlID);
+                    callBack.onSqlNonSelectTaskComplete(this);
                 }
             }
 
@@ -187,8 +220,11 @@ public class asyncTask extends AsyncTask<String, String, String> {
         catch(Exception e){
         }
         finally {
-            if(Message != null){
-                loadingDialog.dismiss();
+            if(ShowProgress == false){}
+            else{
+                if(Message != null) {
+                    loadingDialog.dismiss();
+                }
             }
         }
     }

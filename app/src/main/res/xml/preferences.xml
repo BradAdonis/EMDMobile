@@ -52,9 +52,7 @@
             android:summary="@string/appUIQueryFrequenceDescription"
             android:defaultValue="@string/appUIQueryFrequencyDefaults"
             android:entries="@array/frequencyMinutes"
-            android:entryValues="@array/frequencyMinutes"
-            android:enabled="false"
-            android:selectable="false"/>
+            android:entryValues="@array/frequencyMinutes"/>
         <EditTextPreference android:title="@string/appUIPatientModifiedSince"
             android:key="pref_key_ui_patmod"
             android:summary="@string/appUIPatientModifiedSinceDescription"

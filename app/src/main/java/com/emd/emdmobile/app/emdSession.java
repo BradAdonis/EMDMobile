@@ -26,6 +26,7 @@ public class emdSession implements Serializable {
     public String currentURL = "";
     public String patientModifiedDate = "";
     public String claimModifiedDate = "";
+    public int refreshFrequency = 0;
 
     public emdSession(){}
 
@@ -123,6 +124,8 @@ public class emdSession implements Serializable {
         webDetails.Sys = pm.getString("pref_key_comm_method",null);
         patientModifiedDate = pm.getString("pref_key_ui_patmod",null);
         claimModifiedDate = pm.getString("pref_key_ui_claimmod",null);
+        String value = pm.getString("pref_key_ui_freq",null);
+        refreshFrequency = Integer.valueOf(value);
     }
 
     public void setPatientModifiedDate(Activity a, String ModDate){

@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.NavUtils;
@@ -38,7 +39,6 @@ public class userRegistration extends Activity implements asyncTaskCompleteListn
     private emdSession clientSession;
     private final static String ClientSession = "ClientSession";
     private final static String Unknown = "Unknown";
-    private final static String ActionbarColour = "#012968";
     private final static String EnterValidPassword = "Please enter a valid password";
     private final static String LoadingData = "Loading Data";
     private final static String Authentication = "Authenticating User";
@@ -238,20 +238,14 @@ public class userRegistration extends Activity implements asyncTaskCompleteListn
                                 edtPassword.setText("");
                                 edtConfirmPassword.setText("");
                                 clientSession.showToast(userRegistration.this,PasswordMatch.toString());
-                                //Toast t = Toast.makeText(getApplicationContext(), PasswordMatch, Toast.LENGTH_LONG);
-                                //t.show();
                             }
                         }
                         else{
                             clientSession.showToast(userRegistration.this, EnterValidPassword);
-                           /* Toast t = Toast.makeText(getApplicationContext(), EnterValidPassword, Toast.LENGTH_LONG);
-                            t.show();*/
                         }
                     }
                     else{
                         clientSession.showToast(userRegistration.this, OTPEnter);
-                        /*Toast t = Toast.makeText(getApplicationContext(), OTPEnter, Toast.LENGTH_LONG);
-                        t.show();*/
                     }
                 }
             });
@@ -260,8 +254,6 @@ public class userRegistration extends Activity implements asyncTaskCompleteListn
         }
         else{
             clientSession.showToast(userRegistration.this, InvalidPractice);
-            /*Toast t = Toast.makeText(getApplicationContext(), InvalidPractice, Toast.LENGTH_LONG);
-            t.show();*/
         }
     }
 
@@ -286,8 +278,6 @@ public class userRegistration extends Activity implements asyncTaskCompleteListn
                 }
                 else{
                     clientSession.showToast(userRegistration.this,EnterValidPassword.toString());
-                   /* Toast t = Toast.makeText(getApplicationContext(),EnterValidPassword,Toast.LENGTH_LONG);
-                    t.show();*/
                 }
                 break;
             case R.id.action_settings:
@@ -380,24 +370,20 @@ public class userRegistration extends Activity implements asyncTaskCompleteListn
                 aTask.execute(clientSession.getAuthUrl());
             } else {
                 clientSession.showToast(userRegistration.this,EnterValidPassword);
-                /*Toast t = Toast.makeText(getApplicationContext(), EnterValidPassword, Toast.LENGTH_LONG);
-                t.show();*/
             }
         }
         else{
             clientSession.showToast(userRegistration.this, InvalidPractice);
-            /*Toast t = Toast.makeText(getApplicationContext(), InvalidPractice, Toast.LENGTH_LONG);
-            t.show();*/
         }
     }
 
     @Override
-    public void onWebTaskComplete(String Method, String Result){
+    public void onWebTaskComplete(asyncTask a){
 
-        if(Method == JsonSearchMethod){
+        if(a.getMethod() == JsonSearchMethod){
             try {
                 Gson gSon = new Gson();
-                userDetails ud = gSon.fromJson(Result,userDetails.class);
+                userDetails ud = gSon.fromJson(a.getResult(),userDetails.class);
                 clientSession.uDetails = ud;
                 clientSession.validPassword = false;
 
@@ -411,8 +397,9 @@ public class userRegistration extends Activity implements asyncTaskCompleteListn
                 Log.e("Json Error", e.getMessage());
             }
         }
-        else if(Method == JsonOTPMethod){
+        else if(a.getMethod() == JsonOTPMethod){
             try{
+                String Result = a.getResult();
                 Result = "{" + Result + "}";
                 Result = Result.replace("null","\"null\"");
                 Result = Result.replace(":\"{",":{");
@@ -428,8 +415,9 @@ public class userRegistration extends Activity implements asyncTaskCompleteListn
                 Log.e("json",e.toString());
             }
         }
-        else if(Method == JsonConfirmMethod){
+        else if(a.getMethod() == JsonConfirmMethod){
             try{
+                String Result = a.getResult();
                 Result = "{" + Result + "}";
                 Result = Result.replace("null","\"null\"");
                 Result = Result.replace(":\"{",":{");
@@ -465,14 +453,12 @@ public class userRegistration extends Activity implements asyncTaskCompleteListn
         }
         else{
             clientSession.showToast(userRegistration.this,EnterValidPassword);
-            /*Toast t = Toast.makeText(getApplicationContext(),EnterValidPassword,Toast.LENGTH_LONG);
-            t.show();*/
         }
     }
 
     @Override
-    public void onSqlNonSelectTaskComplete(String Method, long i){}
+    public void onSqlNonSelectTaskComplete(asyncTask a){}
 
     @Override
-    public void onSqlSelectTaskComplete(String Method, List<sqlObject> objs){}
+    public void onSqlSelectTaskComplete(asyncTask a){}
 }
