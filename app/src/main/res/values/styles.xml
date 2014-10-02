@@ -1,12 +1,25 @@
 <resources>
     <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
         <item name="android:activatedBackgroundIndicator">@drawable/listitem_background</item>
-        <item name="actionBarStyle">@style/actionBarBackground</item>
         <item name="android:textColor">#012968</item>
         <item name="android:textColorHint">#012968</item>
         <item name="android:textColorPrimary">#012968</item>
         <item name="android:textColorSecondary">#012968</item>
         <item name="android:textColorTertiary">#012968</item>
+        <item name="android:actionBarStyle">@style/actionBar</item>
+    </style>
+
+    <style name="actionBar" parent="android:Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">#012968</item>
+        <item name="android:textColor">#fff</item>
+    </style>
+
+    <style name="actionBarText" parent="android:Widget.ActionBar.TabBar">
+        <item name="android:textColor">#fff</item>
+    </style>
+
+    <style name="actionBarTabText" parent="android:Widget.Holo.ActionBar.TabText">
+        <item name="android:textColor">#fff</item>
     </style>
 
     <style name="listFont" parent="android:style/Widget.ListView">
@@ -20,10 +33,6 @@
 
     <style name="textBlue">
         <item name="android:textColor">#012968</item>
-    </style>
-
-    <style name="actionBarBackground" parent="android:style/Widget.ActionBar">
-        <item name="android:background">#012968</item>
     </style>
 
     <style name="ListItem">

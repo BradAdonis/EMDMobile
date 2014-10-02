@@ -63,9 +63,6 @@ public class userRegistration extends Activity implements asyncTaskCompleteListn
         setContentView(R.layout.activity_user_registration);
 
         ActionBar actionBar = getActionBar();
-        ColorDrawable colorDrawable = new ColorDrawable();
-        colorDrawable.setColor(Color.parseColor(ActionbarColour));
-        actionBar.setBackgroundDrawable(colorDrawable);
         actionBar.setTitle(R.string.registrationRegistrationPractice);
 
         //get the session from the bundle

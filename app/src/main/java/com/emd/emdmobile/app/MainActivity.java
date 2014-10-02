@@ -95,7 +95,6 @@ public class MainActivity extends Activity
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
-        //mTitle = getTitle().toString();
 
         if(savedInstanceState != null)
         {
@@ -108,11 +107,6 @@ public class MainActivity extends Activity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        //Colour the action bar
-        ActionBar actionBar = getActionBar();
-        ColorDrawable colorDrawable = new ColorDrawable();
-        colorDrawable.setColor(Color.parseColor(ActionbarColour));
-        actionBar.setBackgroundDrawable(colorDrawable);
     }
 
     @Override
@@ -143,6 +137,7 @@ public class MainActivity extends Activity
     @Override
     protected void onResume()
     {
+        clientSession.initPreferences(this);
         super.onResume();
     }
 
@@ -612,34 +607,40 @@ public class MainActivity extends Activity
         int id = item.getItemId();
         clientSession.initPreferences(this);
 
-        switch(id){
-            case R.id.action_settings:
-                ActionBar actionBar = getActionBar();
-                actionBar.setTitle(R.string.appSettingsTitle);
-                getFragmentManager().beginTransaction().replace(R.id.container, new preferenceActivity()).commit();
-                break;
-            case R.id.action_password:
-                Bundle b = new Bundle();
-                b.putSerializable(ClientSession,clientSession);
-                Intent i = new Intent(MainActivity.this, userRegistration.class);
-                i.putExtras(b);
-                startActivity(i);
-                break;
-            case R.id.action_refresh:
-                if(mTitle.contentEquals(PageTitleClaims)){
-                    GetPracticeClaims();
-                }
-                else if(mTitle.contentEquals(PageTitlePatients)){
-                    GetPracticePatients();
-                }
-                break;
-            case R.id.action_bar_search:
-                if(mTitle.contentEquals(PageTitlePatients)){
-                    CreateSearchDialog(SearchTitlePatients,JsonPatient);
-                }
-                else if(mTitle.contentEquals(PageTitleClaims)){
-                    CreateSearchDialog(SearchTitleClaims,JsonClaim);
-                };
+        if(id == R.id.action_settings)
+        {
+            Bundle b = new Bundle();
+            b.putSerializable(ClientSession,clientSession);
+            Intent i = new Intent(MainActivity.this, Settings.class);
+            i.putExtras(b);
+            startActivity(i);
+        }
+        else{
+            switch(id){
+                case R.id.action_password:
+                    Bundle b = new Bundle();
+                    b.putSerializable(ClientSession,clientSession);
+                    Intent i = new Intent(MainActivity.this, userRegistration.class);
+                    i.putExtras(b);
+                    startActivity(i);
+                    break;
+                case R.id.action_refresh:
+                    if(mTitle.contentEquals(PageTitleClaims)){
+                        GetPracticeClaims();
+                    }
+                    else if(mTitle.contentEquals(PageTitlePatients)){
+                        GetPracticePatients();
+                    }
+                    break;
+                case R.id.action_bar_search:
+                    if(mTitle.contentEquals(PageTitlePatients)){
+                        CreateSearchDialog(SearchTitlePatients,JsonPatient);
+                    }
+                    else if(mTitle.contentEquals(PageTitleClaims)){
+                        CreateSearchDialog(SearchTitleClaims,JsonClaim);
+                    };
+                    break;
+            }
         }
 
         return super.onOptionsItemSelected(item);
