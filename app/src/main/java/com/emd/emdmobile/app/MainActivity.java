@@ -53,12 +53,34 @@ public class MainActivity extends Activity
     private emdSession clientSession;
     private final static String ClientSession = "ClientSession";
     private final static String ActionbarColour = "#012968";
-    private final static String JsonPatient = "patient";
-    private final static String JsonClaim = "claim";
+    private final static String DateFormat = "yyyy-MM-dd";
+
     private final static String MessagePatient = "Syncing Patients From Cloud";
     private final static String MessageClaim = "Syncing Claims From Cloud";
+
     private final static String JsonErrorPatient = "No new patient information has been retrieved";
     private final static String JsonErrorClaim = "No new claim information has been retrieved";
+    private final static String JsonPatientUpdateMessage = "Updating Patients";
+    private final static String JsonClaimUpdateMessage = "Updating Claims";
+    private final static String JsonPatientSelectMessage = "Retrieving Patient Information";
+    private final static String JsonClaimSelectMessage = "Retrieving Claim Information";
+    private final static String JsonPatient = "patient";
+    private final static String JsonPatientSelect = "selectpatients";
+    private final static String JsonPatientInsert = "insertpatient";
+    private final static String JsonClaim = "claim";
+    private final static String JsonClaimSelect = "selectclaims";
+    private final static String JsonClaimInsert = "insertclaim";
+
+    private final static String WebPagePatientForm = "mPatients";
+    private final static String WebPageClaimForm = "mPatients";
+
+    private final static String PageTitlePatients = "Patients";
+    private final static String PageTitleClaims = "Claims";
+
+    private final static String SearchTitlePatients = "Patient Search";
+    private final static String SearchTitleClaims = "Claim Search";
+
+    //region ACTIVITY OVERRIDES
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -136,8 +158,196 @@ public class MainActivity extends Activity
         super.onStop();
     }
 
-    public void onSectionAttached(int number) {
+    //endregion
+
+    //region WEB ASYNC TASKS
+
+    private void GetPracticePatients(){
+        asyncTask aTask = new asyncTask(this);
+        aTask.setClientSession(clientSession);
+        aTask.setAsyncSystem(asyncTask.asyncSystem.WebMethod);
+        aTask.setAsyncMethod(JsonPatient);
+        aTask.setMessage(MessagePatient);
+        aTask.execute(clientSession.getPatientUrl(clientSession.patientModifiedDate));
     }
+
+    private void GetPracticeClaims(){
+        asyncTask aTask = new asyncTask(this);
+        aTask.setClientSession(clientSession);
+        aTask.setAsyncSystem(asyncTask.asyncSystem.WebMethod);
+        aTask.setAsyncMethod(JsonClaim);
+        aTask.setMessage(MessageClaim);
+        aTask.execute(clientSession.getClaimURL(clientSession.claimModifiedDate));
+    }
+
+    //endregion
+
+    //region RENDER JSON
+
+    private void CreateJsonPatient(String result){
+        List<sqlObject> objList = new ArrayList<sqlObject>();
+
+        try
+        {
+            JSONArray userArray = new JSONArray(result);
+
+            for(int i = 0; i < userArray.length(); i++){
+                JSONObject userObject = new JSONObject(userArray.get(i).toString());
+                Gson g = new Gson();
+                patientDetails p = g.fromJson(userObject.toString(),patientDetails.class);
+                if(p != null){
+                    sqlObject s = new sqlObject();
+                    s.setJson(userObject.toString());
+                    s.setType(JsonPatient);
+                    try {
+                        DateFormat df = new SimpleDateFormat(DateFormat);
+                        s.setModDate(df.parse(p.LastModified));
+                    }catch(ParseException d){}
+                    s.setUnid(p.Identifier);
+                    s.setKeywords("[" + p.FirstName.toLowerCase() + ";" + p.LastName.toLowerCase() + ";" + p.AccountNumber.toLowerCase() + "]");
+                    objList.add(s);
+                }
+            }
+        }
+        catch(JSONException e){
+            clientSession.showToast(MainActivity.this,JsonErrorPatient);
+        }
+
+        if(objList.size() > 0){
+            sqlObject o = new sqlObject();
+            o.setType(JsonPatient);
+            asyncTask a = new asyncTask(this);
+            a.setClientSession(clientSession);
+            a.setAsyncSystem(asyncTask.asyncSystem.SqlMethod);
+            a.setMessage(JsonPatientUpdateMessage);
+            a.setAsyncMethod(JsonPatientInsert);
+            a.setSqlMethod(asyncTask.asyncSQLMethod.Refresh);
+            a.setSqlObject(o);
+            a.setSqlObjects(objList);
+            a.execute("");
+        }
+
+        Date today = Calendar.getInstance().getTime();
+        DateFormat sdt = new SimpleDateFormat(DateFormat);
+        clientSession.setPatientModifiedDate(this, sdt.format(today));
+
+        if(objList.size() > 0) {
+            clientSession.ShowNotification(this, "Patients Modified/Added", objList.size() + " patients have been modified / added to the database.");
+        }
+        else
+        {
+            clientSession.ShowNotification(this, "Patients Modified/Added", "No patient modifications have been found.");
+        }
+    }
+
+    private void CreateJsonClaim(String result){
+
+        List<sqlObject> objList = new ArrayList<sqlObject>();
+
+        try
+        {
+            JSONArray claimArray = new JSONArray(result);
+
+            for(int i = 0; i < claimArray.length(); i++){
+                JSONObject userObject = new JSONObject(claimArray.get(i).toString());
+                Gson g = new Gson();
+                claimDetails c = g.fromJson(userObject.toString(),claimDetails.class);
+                if(c != null){
+                    sqlObject s = new sqlObject();
+                    s.setJson(userObject.toString());
+                    s.setType(JsonClaim);
+                    try {
+                        DateFormat df = new SimpleDateFormat(DateFormat);
+                        s.setModDate(df.parse(c.LastModified));
+                    }catch(ParseException d){}
+                    s.setUnid(c.Identifier);
+
+                    if(c.Patient != null && c.ICDDescr != null && c.MedicalAid != null && c.MedicalAidOption != null){
+                        s.setKeywords("[" + c.Patient.toLowerCase() + ";" + c.ICDDescr.toLowerCase() + ";" + c.MedicalAid.toLowerCase() + ";" + c.MedicalAidOption + "]");
+                    }
+                    else{
+                        s.setKeywords("[" + c.Patient.toLowerCase() +"]");
+                    }
+
+
+                    objList.add(s);
+                }
+            }
+        }
+        catch(JSONException e){
+            clientSession.showToast(MainActivity.this,JsonErrorClaim);
+        }
+        catch(Exception e){
+            clientSession.showToast(MainActivity.this, e.getMessage());
+        }
+
+        if(objList.size() > 0){
+            sqlObject o = new sqlObject();
+            o.setType(JsonClaim);
+            asyncTask a = new asyncTask(this);
+            a.setClientSession(clientSession);
+            a.setAsyncSystem(asyncTask.asyncSystem.SqlMethod);
+            a.setMessage(JsonClaimUpdateMessage);
+            a.setAsyncMethod(JsonClaimInsert);
+            a.setSqlMethod(asyncTask.asyncSQLMethod.Refresh);
+            a.setSqlObject(o);
+            a.setSqlObjects(objList);
+            a.execute("");
+        }
+
+        Date today = Calendar.getInstance().getTime();
+        DateFormat sdt = new SimpleDateFormat(DateFormat);
+        clientSession.setClaimModifiedDate(this, sdt.format(today));
+
+        if(objList.size() > 0) {
+            clientSession.ShowNotification(this, "Claims Modified/Added", objList.size() + " claims have been modified / added to the database.");
+        }
+        else
+        {
+            clientSession.ShowNotification(this, "Claims Modified/Added", "No claim modifications have been found.");
+        }
+
+    }
+
+    //endregion
+
+    //region SQL TASKS
+
+    private void GetSQLDBPatients(String Keyword){
+        sqlObject o = new sqlObject();
+        o.setType(JsonPatient);
+        if(Keyword != null){
+            o.setKeywords(Keyword);
+        }
+        asyncTask a = new asyncTask(this);
+        a.setClientSession(clientSession);
+        a.setMessage(JsonPatientSelectMessage);
+        a.setSqlMethod(asyncTask.asyncSQLMethod.Select);
+        a.setAsyncMethod(JsonPatientSelect);
+        a.setAsyncSystem(asyncTask.asyncSystem.SqlMethod);
+        a.setSqlObject(o);
+        a.execute("");
+    }
+
+    private void GetSQLDBClaims(String Keyword){
+        sqlObject o = new sqlObject();
+        o.setType(JsonClaim);
+        if(Keyword != null){
+            o.setKeywords(Keyword);
+        }
+        asyncTask a = new asyncTask(this);
+        a.setClientSession(clientSession);
+        a.setMessage(JsonClaimSelectMessage);
+        a.setSqlMethod(asyncTask.asyncSQLMethod.Select);
+        a.setAsyncMethod(JsonClaimSelect);
+        a.setAsyncSystem(asyncTask.asyncSystem.SqlMethod);
+        a.setSqlObject(o);
+        a.execute("");
+    }
+
+    //endregion
+
+    //region UI TASKS
 
     private void CreateNavigation(int position){
         switch (position + 1) {
@@ -223,56 +433,6 @@ public class MainActivity extends Activity
         fragmentManager.beginTransaction().replace(R.id.container, webView.newInstance(URL)).commit();
     }
 
-    private void GetSQLDBPatients(String Keyword){
-        sqlObject o = new sqlObject();
-        o.setType(JsonPatient);
-        if(Keyword != null){
-            o.setKeywords(Keyword);
-        }
-        asyncTask a = new asyncTask(this);
-        a.setClientSession(clientSession);
-        a.setMessage("Retrieving Patient Information");
-        a.setSqlMethod(asyncTask.asyncSQLMethod.Select);
-        a.setAsyncMethod("selectpatients");
-        a.setAsyncSystem(asyncTask.asyncSystem.SqlMethod);
-        a.setSqlObject(o);
-        a.execute("");
-    }
-
-    private void GetSQLDBClaims(String Keyword){
-        sqlObject o = new sqlObject();
-        o.setType(JsonClaim);
-        if(Keyword != null){
-            o.setKeywords(Keyword);
-        }
-        asyncTask a = new asyncTask(this);
-        a.setClientSession(clientSession);
-        a.setMessage("Retrieving Claim Information");
-        a.setSqlMethod(asyncTask.asyncSQLMethod.Select);
-        a.setAsyncMethod("selectclaims");
-        a.setAsyncSystem(asyncTask.asyncSystem.SqlMethod);
-        a.setSqlObject(o);
-        a.execute("");
-    }
-
-    private void GetPracticePatients(){
-        asyncTask aTask = new asyncTask(this);
-        aTask.setClientSession(clientSession);
-        aTask.setAsyncSystem(asyncTask.asyncSystem.WebMethod);
-        aTask.setAsyncMethod(JsonPatient);
-        aTask.setMessage(MessagePatient);
-        aTask.execute(clientSession.getPatientUrl(clientSession.patientModifiedDate));
-    }
-
-    private void GetPracticeClaims(){
-        asyncTask aTask = new asyncTask(this);
-        aTask.setClientSession(clientSession);
-        aTask.setAsyncSystem(asyncTask.asyncSystem.WebMethod);
-        aTask.setAsyncMethod(JsonClaim);
-        aTask.setMessage(MessageClaim);
-        aTask.execute(clientSession.getClaimURL(clientSession.claimModifiedDate));
-    }
-
     private void CreateSearchDialog(String HeaderLabel, final String SearchType){
         final Dialog searchDialog = new Dialog(this);
         searchDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -321,6 +481,9 @@ public class MainActivity extends Activity
         searchDialog.show();
     }
 
+    public void onSectionAttached(int number) {
+    }
+
     public void restoreActionBar() {
         ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
@@ -328,197 +491,86 @@ public class MainActivity extends Activity
         actionBar.setTitle(mTitle);
     }
 
+    private void CreateUIPatientControls(List<sqlObject> objs){
+        String[] patientsID = new String[objs.size()];
+        ArrayList<patientDetails> Patients = new ArrayList<patientDetails>(objs.size());
+
+        for(int i = 0; i < objs.size(); i++){
+            Gson g = new Gson();
+            sqlObject o = objs.get(i);
+            patientDetails p = g.fromJson(o.getJson(),patientDetails.class);
+
+            if(p != null){
+                Patients.add(p);
+                patientsID[i] = p.Identifier;
+            }
+        }
+
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.container, patientlistFragment.newInstance(Patients,patientsID)).commit();
+    }
+
+    private void CreateUIClaimControls(List<sqlObject> objs){
+        String[] claimsID = new String[objs.size()];
+        ArrayList<claimDetails> Claims = new ArrayList<claimDetails>(objs.size());
+
+        for(int i = 0; i < objs.size(); i++){
+            Gson g = new Gson();
+            sqlObject o = objs.get(i);
+            claimDetails c = g.fromJson(o.getJson(),claimDetails.class);
+
+            if(c != null){
+                Claims.add(c);
+                claimsID[i] = c.Identifier;
+            }
+        }
+
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.container, claimlistFragment.newInstance(Claims,claimsID)).commit();
+    }
+
+    //endregion
+
+    //region ASYNC TASKS
+
     @Override
     public void onWebTaskComplete(String Method, String result){
         if(Method == JsonPatient){
-            try
-            {
-                JSONArray userArray = new JSONArray(result);
-                List<sqlObject> objList = new ArrayList<sqlObject>();
 
-                /*String[] patientsID = new String[userArray.length()];
-                ArrayList<patientDetails> Patients = new ArrayList<patientDetails>(userArray.length());*/
-
-                for(int i = 0; i < userArray.length(); i++){
-                    JSONObject userObject = new JSONObject(userArray.get(i).toString());
-                    Gson g = new Gson();
-                    patientDetails p = g.fromJson(userObject.toString(),patientDetails.class);
-                    if(p != null){
-                        sqlObject s = new sqlObject();
-                        s.setJson(userObject.toString());
-                        s.setType(JsonPatient);
-                        try {
-                            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                            s.setModDate(df.parse(p.LastModified));
-                        }catch(ParseException d){}
-                        s.setUnid(p.Identifier);
-                        s.setKeywords("[" + p.FirstName.toLowerCase() + ";" + p.LastName.toLowerCase() + ";" + p.AccountNumber.toLowerCase() + "]");
-                        objList.add(s);
-
-                        /*Patients.add(p);
-                        patientsID[i] = p.Identifier;*/
-                    }
-                }
-
-                if(objList.size() > 0){
-                    sqlObject o = new sqlObject();
-                    o.setType(JsonPatient);
-                    asyncTask a = new asyncTask(this);
-                    a.setClientSession(clientSession);
-                    a.setAsyncSystem(asyncTask.asyncSystem.SqlMethod);
-                    a.setMessage("Updating Patients");
-                    a.setAsyncMethod("insertpatient");
-                    a.setSqlMethod(asyncTask.asyncSQLMethod.Refresh);
-                    a.setSqlObject(o);
-                    a.setSqlObjects(objList);
-                    a.execute("");
-                }
-
-                Date today = Calendar.getInstance().getTime();
-                DateFormat sdt = new SimpleDateFormat("yyyy-MM-dd");
-                clientSession.setPatientModifiedDate(this, sdt.format(today));
-
-                if(objList.size() > 0) {
-                    clientSession.ShowNotification(this, "Patients Modified/Added", objList.size() + " patients have been modified / added to the database.");
-                }
-                else
-                {
-                    clientSession.ShowNotification(this, "Patients Modified/Added", "No patient modifications have been found.");
-                }
-
-
-               /* FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.container, patientlistFragment.newInstance(Patients,patientsID)).commit();*/
-            }
-            catch(JSONException e){
-                clientSession.showToast(MainActivity.this,JsonErrorPatient);
-                /*Toast t = Toast.makeText(getApplicationContext(),JsonErrorPatient,Toast.LENGTH_LONG);
-                t.show();*/
-            }
+            CreateJsonPatient(result);
         }
         else if(Method == JsonClaim){
-            try
-            {
-                JSONArray claimArray = new JSONArray(result);
-                List<sqlObject> objList = new ArrayList<sqlObject>();
 
-                /*String[] patientsID = new String[userArray.length()];
-                ArrayList<patientDetails> Patients = new ArrayList<patientDetails>(userArray.length());*/
-
-                for(int i = 0; i < claimArray.length(); i++){
-                    JSONObject userObject = new JSONObject(claimArray.get(i).toString());
-                    Gson g = new Gson();
-                    claimDetails c = g.fromJson(userObject.toString(),claimDetails.class);
-                    if(c != null){
-                        sqlObject s = new sqlObject();
-                        s.setJson(userObject.toString());
-                        s.setType(JsonClaim);
-                        try {
-                            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                            s.setModDate(df.parse(c.LastModified));
-                            }catch(ParseException d){}
-                            s.setUnid(c.Identifier);
-                            s.setKeywords("[" + c.Patient.toLowerCase() + ";" + c.ICDDescr.toLowerCase() + ";" + c.MedicalAid.toLowerCase() + ";" + c.MedicalAidOption + "]");
-                            objList.add(s);
-
-                        /*Patients.add(p);
-                        patientsID[i] = p.Identifier;*/
-                    }
-                }
-
-                if(objList.size() > 0){
-                    sqlObject o = new sqlObject();
-                    o.setType(JsonClaim);
-                    asyncTask a = new asyncTask(this);
-                    a.setClientSession(clientSession);
-                    a.setAsyncSystem(asyncTask.asyncSystem.SqlMethod);
-                    a.setMessage("Updating Claims");
-                    a.setAsyncMethod("insertclaim");
-                    a.setSqlMethod(asyncTask.asyncSQLMethod.Refresh);
-                    a.setSqlObject(o);
-                    a.setSqlObjects(objList);
-                    a.execute("");
-                    }
-
-                    Date today = Calendar.getInstance().getTime();
-                    DateFormat sdt = new SimpleDateFormat("yyyy-MM-dd");
-                    clientSession.setClaimModifiedDate(this, sdt.format(today));
-
-                    if(objList.size() > 0) {
-                        clientSession.ShowNotification(this, "Claims Modified/Added", objList.size() + " claims have been modified / added to the database.");
-                    }
-                    else
-                    {
-                        clientSession.ShowNotification(this, "Claims Modified/Added", "No claim modifications have been found.");
-                    }
-
-
-               /* FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.container, patientlistFragment.newInstance(Patients,patientsID)).commit();*/
-            }
-            catch(JSONException e){
-                clientSession.showToast(MainActivity.this,JsonErrorClaim);
-                /*Toast t = Toast.makeText(getApplicationContext(),JsonErrorPatient,Toast.LENGTH_LONG);
-                t.show();*/
-                }
-            }
+           CreateJsonClaim(result);
+        }
     }
 
     @Override
-    public void onDominoTaskComplete(boolean result){
-
-    }
+    public void onDominoTaskComplete(boolean result){}
 
     @Override
     public void onSqlSelectTaskComplete(String Method, List<sqlObject> objs){
-        if(Method.contentEquals("selectpatients")){
-
-            String[] patientsID = new String[objs.size()];
-            ArrayList<patientDetails> Patients = new ArrayList<patientDetails>(objs.size());
-
-            for(int i = 0; i < objs.size(); i++){
-                Gson g = new Gson();
-                sqlObject o = objs.get(i);
-                patientDetails p = g.fromJson(o.getJson(),patientDetails.class);
-
-                if(p != null){
-                    Patients.add(p);
-                    patientsID[i] = p.Identifier;
-                }
-            }
-
-            FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.container, patientlistFragment.newInstance(Patients,patientsID)).commit();
+        if(Method.contentEquals(JsonPatientSelect)){
+            CreateUIPatientControls(objs);
         }
 
-        if(Method.contentEquals("selectclaims")){
-            String[] claimsID = new String[objs.size()];
-            ArrayList<claimDetails> Claims = new ArrayList<claimDetails>(objs.size());
-
-            for(int i = 0; i < objs.size(); i++){
-                Gson g = new Gson();
-                sqlObject o = objs.get(i);
-                claimDetails c = g.fromJson(o.getJson(),claimDetails.class);
-
-                if(c != null){
-                    Claims.add(c);
-                    claimsID[i] = c.Identifier;
-                }
-            }
-
-            FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.container, claimlistFragment.newInstance(Claims,claimsID)).commit();
+        if(Method.contentEquals(JsonClaimSelect)){
+            CreateUIClaimControls(objs);
         }
     }
 
     @Override
     public void onSqlNonSelectTaskComplete(String Method, long i){
-        if(Method.contentEquals("insertpatient")){
+        if(Method.contentEquals(JsonPatientInsert)){
             GetSQLDBPatients(null);
-        }else if(Method.contentEquals("insertclaim")){
+        }else if(Method.contentEquals(JsonClaimInsert)){
             GetSQLDBClaims(null);
         }
     }
+
+    //endregion
+
+    //region INTERACTIONS
 
     @Override
     public void onFragmentInteraction(Uri uri){
@@ -530,11 +582,11 @@ public class MainActivity extends Activity
         String Url = "";
 
         if(Function.contentEquals(JsonPatient)){
-            Url = clientSession.getDBUrlDocument("mPatients",id);
+            Url = clientSession.getDBUrlDocument(WebPagePatientForm,id);
         }
 
         if(Function.contentEquals(JsonClaim)){
-            Url = clientSession.getDBUrlDocument("mClaims",id);
+            Url = clientSession.getDBUrlDocument(WebPageClaimForm,id);
         }
 
         clientSession.currentURL = Url;
@@ -574,19 +626,19 @@ public class MainActivity extends Activity
                 startActivity(i);
                 break;
             case R.id.action_refresh:
-                if(mTitle.contentEquals("Claims")){
+                if(mTitle.contentEquals(PageTitleClaims)){
                     GetPracticeClaims();
                 }
-                else if(mTitle.contentEquals("Patients")){
+                else if(mTitle.contentEquals(PageTitlePatients)){
                     GetPracticePatients();
                 }
                 break;
             case R.id.action_bar_search:
-                if(mTitle.contentEquals("Patients")){
-                    CreateSearchDialog("Patient Search",JsonPatient);
+                if(mTitle.contentEquals(PageTitlePatients)){
+                    CreateSearchDialog(SearchTitlePatients,JsonPatient);
                 }
-                else if(mTitle.contentEquals("Claims")){
-                    CreateSearchDialog("Claim Search",JsonClaim);
+                else if(mTitle.contentEquals(PageTitleClaims)){
+                    CreateSearchDialog(SearchTitleClaims,JsonClaim);
                 };
         }
 
@@ -605,6 +657,8 @@ public class MainActivity extends Activity
 
         CreateNavigation(position);
     }
+
+    //endregion
 
     public static class PlaceholderFragment extends Fragment{
         private static final String ARG_SECTION_NUMBER = "section_number";

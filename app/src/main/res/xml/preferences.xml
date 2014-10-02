@@ -8,7 +8,9 @@
                 android:summary="@string/appCommProtocolDesc"
                 android:defaultValue="@string/appCommProtocolDefault"
                 android:entries="@array/protocolsArray"
-                android:entryValues="@array/protocolsArray"/>
+                android:entryValues="@array/protocolsArray"
+                android:enabled="false"
+                android:selectable="false"/>
 
             <ListPreference android:key="pref_key_comm_server"
                 android:title="@string/appCommServer"
@@ -20,7 +22,9 @@
             <EditTextPreference android:key="pref_key_comm_method"
                 android:title="@string/appCommMethod"
                 android:summary="@string/appCommMethodDescription"
-                android:defaultValue="@string/appCommMethodDefault"/>
+                android:defaultValue="@string/appCommMethodDefault"
+                android:enabled="false"
+                android:selectable="false"/>
         </PreferenceCategory>
     <PreferenceCategory android:title="@string/appUIGrouping">
         <ListPreference android:title="@string/appUIListLimit"
@@ -33,18 +37,24 @@
             android:key="pref_key_ui_offlinestart"
             android:summary="@string/appUIOfflineStartTimeDescription"
             android:hint="@string/appUIOfflineStartHelp"
-            android:defaultValue="@string/appUIOfflineStartDefault"/>
+            android:defaultValue="@string/appUIOfflineStartDefault"
+            android:enabled="false"
+            android:selectable="false"/>
         <EditTextPreference android:title="@string/appUIOfflineEndTime"
             android:key="pref_key_ui_offlineend"
             android:summary="@string/appUIOfflineEndDescription"
             android:hint="@string/appUIOfflineEndHelp"
-            android:defaultValue="@string/appUIOfflineEndDefault"/>
+            android:defaultValue="@string/appUIOfflineEndDefault"
+            android:enabled="false"
+            android:selectable="false"/>
         <ListPreference android:title="@string/appUIQueryFrequency"
             android:key="pref_key_ui_freq"
             android:summary="@string/appUIQueryFrequenceDescription"
             android:defaultValue="@string/appUIQueryFrequencyDefaults"
             android:entries="@array/frequencyMinutes"
-            android:entryValues="@array/frequencyMinutes"/>
+            android:entryValues="@array/frequencyMinutes"
+            android:enabled="false"
+            android:selectable="false"/>
         <EditTextPreference android:title="@string/appUIPatientModifiedSince"
             android:key="pref_key_ui_patmod"
             android:summary="@string/appUIPatientModifiedSinceDescription"

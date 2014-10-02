@@ -165,9 +165,6 @@ public class asyncTask extends AsyncTask<String, String, String> {
     protected void onPostExecute(String Result){
         super.onPostExecute(Result);
 
-        if(Message != null){
-            loadingDialog.dismiss();
-        }
         try{
             if(aSystem == asyncSystem.WebMethod){
                 callBack.onWebTaskComplete(this.Method,Result);
@@ -188,6 +185,11 @@ public class asyncTask extends AsyncTask<String, String, String> {
 
         }
         catch(Exception e){
+        }
+        finally {
+            if(Message != null){
+                loadingDialog.dismiss();
+            }
         }
     }
 }
