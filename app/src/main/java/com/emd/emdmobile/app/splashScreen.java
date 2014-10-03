@@ -5,14 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.google.gson.Gson;
-
-import java.util.List;
 
 
 public class splashScreen extends Activity implements asyncTaskCompleteListner{
@@ -92,7 +88,6 @@ public class splashScreen extends Activity implements asyncTaskCompleteListner{
         }
     }
 
-    //open up the registration form to obtain the practice information
     private void startRegistration(){
 
         if(clientSession == null){

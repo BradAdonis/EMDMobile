@@ -8,9 +8,6 @@ import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpParams;
 
-/**
- * Created by Bradl_000 on 2014-07-18.
- */
 public class httpClient extends DefaultHttpClient {
     private static Context appContenxt = null;
     private static HttpParams params = null;

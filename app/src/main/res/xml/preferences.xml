@@ -33,7 +33,7 @@
                         android:defaultValue="@string/appUIListLimitDefaults"
                         android:entries="@array/listLimits"
                         android:entryValues="@array/listLimits"/>
-        <EditTextPreference android:title="@string/appUIOfflineStartTime"
+       <!-- <EditTextPreference android:title="@string/appUIOfflineStartTime"
             android:key="pref_key_ui_offlinestart"
             android:summary="@string/appUIOfflineStartTimeDescription"
             android:hint="@string/appUIOfflineStartHelp"
@@ -46,7 +46,15 @@
             android:hint="@string/appUIOfflineEndHelp"
             android:defaultValue="@string/appUIOfflineEndDefault"
             android:enabled="false"
-            android:selectable="false"/>
+            android:selectable="false"/>-->
+        <SwitchPreference android:title="@string/appUINotificationsEnabled"
+            android:key="pref_key_ui_notifications"
+            android:summary="@string/appUINotificationsDescription"
+            android:defaultValue="true"/>
+        <SwitchPreference android:title="@string/appUISchedulerEnabled"
+            android:key="pref_key_ui_scheduler"
+            android:summary="@string/appUISchedulerDescription"
+            android:defaultValue="true"/>
         <ListPreference android:title="@string/appUIQueryFrequency"
             android:key="pref_key_ui_freq"
             android:summary="@string/appUIQueryFrequenceDescription"

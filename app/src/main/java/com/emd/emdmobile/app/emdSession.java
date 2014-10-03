@@ -6,7 +6,6 @@ import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.view.Gravity;
@@ -27,6 +26,8 @@ public class emdSession implements Serializable {
     public String patientModifiedDate = "";
     public String claimModifiedDate = "";
     public int refreshFrequency = 0;
+    public boolean schedulerEnabled = true;
+    public boolean notificationsEnabled = true;
 
     public emdSession(){}
 
@@ -126,6 +127,8 @@ public class emdSession implements Serializable {
         claimModifiedDate = pm.getString("pref_key_ui_claimmod",null);
         String value = pm.getString("pref_key_ui_freq",null);
         refreshFrequency = Integer.valueOf(value);
+        schedulerEnabled = pm.getBoolean("pref_key_ui_scheduler",true);
+        notificationsEnabled = pm.getBoolean("pref_key_ui_notifications",true);
     }
 
     public void setPatientModifiedDate(Activity a, String ModDate){
@@ -142,7 +145,7 @@ public class emdSession implements Serializable {
         edt.commit();
     }
 
-    public void ShowNotification(Activity a, String Title, String Message){
+    public void ShowNotification(Activity a, String Title, String Message, int id){
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(a.getApplicationContext())
                                             .setSmallIcon(R.drawable.ic_launcher)
                                             .setContentTitle(Title)
@@ -158,6 +161,6 @@ public class emdSession implements Serializable {
         mBuilder.setContentIntent(resultPendingIntent);
 
         NotificationManager mNotificationManager = (NotificationManager)a.getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(0, mBuilder.build());
+        mNotificationManager.notify(id, mBuilder.build());
     }
 }

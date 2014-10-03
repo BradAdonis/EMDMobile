@@ -6,12 +6,8 @@ import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,14 +17,10 @@ import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Window;
 import android.view.WindowManager;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.google.gson.Gson;
-
-import org.apache.http.impl.cookie.DateParseException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -111,7 +103,9 @@ public class MainActivity extends Activity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        setupSchedule();
+        if(clientSession.schedulerEnabled == true) {
+            setupSchedule();
+        }
     }
 
     @Override
@@ -143,8 +137,15 @@ public class MainActivity extends Activity
     protected void onResume()
     {
         clientSession.initPreferences(this);
-        scheduleTask.shutdown();
-        setupSchedule();
+        try{
+            scheduleTask.shutdown();
+        }
+        catch(Exception e){}
+
+        if(clientSession.schedulerEnabled == true) {
+            setupSchedule();
+        }
+
         super.onResume();
     }
 
@@ -184,18 +185,13 @@ public class MainActivity extends Activity
         aTask.execute(clientSession.getClaimURL(clientSession.claimModifiedDate));
     }
 
-    private void RefreshAll()
-    {
-        GetPracticePatients(false);
-        GetPracticeClaims(false);
-    }
-
     private void setupSchedule(){
         scheduleTask = Executors.newScheduledThreadPool(5);
         scheduleTask.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
-                RefreshAll();
+                GetPracticePatients(false);
+                GetPracticeClaims(false);
             }
         },clientSession.refreshFrequency,clientSession.refreshFrequency, TimeUnit.MINUTES);
     }
@@ -232,6 +228,7 @@ public class MainActivity extends Activity
         catch(JSONException e){
             if(showProgress == true) {
                 clientSession.showToast(MainActivity.this, JsonErrorPatient);
+                GetSQLDBPatients(null);
             }
         }
 
@@ -254,12 +251,13 @@ public class MainActivity extends Activity
         DateFormat sdt = new SimpleDateFormat(DateFormat);
         clientSession.setPatientModifiedDate(this, sdt.format(today));
 
-        if(objList.size() > 0) {
-            clientSession.ShowNotification(this, "Patients Modified/Added", objList.size() + " patients have been modified / added to the database.");
-        }
-        else
-        {
-            clientSession.ShowNotification(this, "Patients Modified/Added", "No patient modifications have been found.");
+        if(clientSession.notificationsEnabled == true) {
+
+            if (objList.size() > 0) {
+                clientSession.ShowNotification(this, "Patients Modified/Added", objList.size() + " patients have been modified / added to the database.",0);
+            } else {
+                clientSession.ShowNotification(this, "Patients Modified/Added", "No patient modifications have been found.",0);
+            }
         }
     }
 
@@ -300,6 +298,7 @@ public class MainActivity extends Activity
         catch(JSONException e){
             if(showProgress == true) {
                 clientSession.showToast(MainActivity.this, JsonErrorClaim);
+                GetSQLDBClaims(null);
             }
         }
 
@@ -322,14 +321,14 @@ public class MainActivity extends Activity
         DateFormat sdt = new SimpleDateFormat(DateFormat);
         clientSession.setClaimModifiedDate(this, sdt.format(today));
 
-        if(objList.size() > 0) {
-            clientSession.ShowNotification(this, "Claims Modified/Added", objList.size() + " claims have been modified / added to the database.");
-        }
-        else
-        {
-            clientSession.ShowNotification(this, "Claims Modified/Added", "No claim modifications have been found.");
-        }
+        if(clientSession.notificationsEnabled == true) {
 
+            if (objList.size() > 0) {
+                clientSession.ShowNotification(this, "Claims Modified/Added", objList.size() + " claims have been modified / added to the database.",1);
+            } else {
+                clientSession.ShowNotification(this, "Claims Modified/Added", "No claim modifications have been found.",1);
+            }
+        }
     }
 
     //endregion
@@ -592,6 +591,14 @@ public class MainActivity extends Activity
                 GetSQLDBPatients(null);
             } else if (a.getMethod().contentEquals(JsonClaimInsert)) {
                 GetSQLDBClaims(null);
+            }
+        }
+        else{
+            if(mTitle == PageTitleClaims){
+                GetSQLDBClaims(null);
+            }
+            else if(mTitle == PageTitlePatients){
+                GetSQLDBPatients(null);
             }
         }
     }

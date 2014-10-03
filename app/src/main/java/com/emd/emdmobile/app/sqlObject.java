@@ -4,9 +4,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * Created by Bradl_000 on 2014-07-30.
- */
 public class sqlObject {
     private long id;
     private String unid;

@@ -12,14 +12,10 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
-/**
- * Created by Bradl_000 on 2014-09-30.
- */
 public class claimItemList extends ArrayAdapter<String> {
 
     private final Activity context;
     private final ArrayList<claimDetails> Claims;
-    private final static String strUnknown = "unknown";
 
     public claimItemList(Activity context, ArrayList<claimDetails> claims, String[] claimids){
         super(context, R.layout.claim_item_list,claimids);
