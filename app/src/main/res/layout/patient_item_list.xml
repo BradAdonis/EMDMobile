@@ -16,8 +16,7 @@
         android:layout_toRightOf="@+id/imgPatient"
         android:layout_margin="@dimen/item_spacing"
         android:textSize="@dimen/contentPrimary"
-        android:text="@string/patientAccount"
-        style="@style/textBlue"/>
+        android:text="@string/patientAccount"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,8 +24,7 @@
         android:layout_toRightOf="@id/txtPatientAccountNo"
         android:layout_margin="@dimen/item_spacing"
         android:textSize="@dimen/contentPrimary"
-        android:text="@string/patientName"
-        style="@style/textBlue"/>
+        android:text="@string/patientName"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -45,8 +43,7 @@
         android:layout_toRightOf="@id/imgPatient"
         android:layout_margin="@dimen/item_spacing"
         android:textSize="@dimen/contentSecondary"
-        android:text="@string/patientDOB"
-        style="@style/textBlue"/>
+        android:text="@string/patientDOB"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -55,8 +52,7 @@
         android:layout_below="@id/txtPatientName"
         android:layout_margin="@dimen/item_spacing"
         android:textSize="@dimen/contentSecondary"
-        android:text="@string/patientContact"
-        style="@style/textBlue"/>
+        android:text="@string/patientContact"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -65,8 +61,7 @@
         android:layout_below="@id/txtPatientName"
         android:layout_margin="@dimen/item_spacing"
         android:textSize="@dimen/contentSecondary"
-        android:text="@string/patientMedicalAid"
-        style="@style/textBlue"/>
+        android:text="@string/patientMedicalAid"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -76,7 +71,6 @@
         android:layout_toRightOf="@id/imgPatient"
         android:layout_margin="@dimen/item_spacing"
         android:textSize="@dimen/contentSecondary"
-        android:text="@string/patientAddress"
-        style="@style/textBlue"/>
+        android:text="@string/patientAddress"/>
 
 </RelativeLayout>

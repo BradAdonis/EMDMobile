@@ -21,12 +21,15 @@
     <dimen name="drawerTextMargin">10dp</dimen>
     <dimen name="drawerWidth">250dp</dimen>
     <!--Content Sizes-->
-    <dimen name="contentPrimary">16sp</dimen>
+    <dimen name="contentPrimary">18sp</dimen>
     <dimen name="contentSecondary">12sp</dimen>
     <dimen name="contentDefault">14sp</dimen>
+    <dimen name="contentHeader">22sp</dimen>
     <!--Dialog Sizes-->
     <dimen name="dlgCornerRadius">10dp</dimen>
     <dimen name="dlgPadding">5dp</dimen>
     <dimen name="dlgStroke">1dp</dimen>
+    <!--Button Height-->
+    <dimen name="buttonHeight">40dp</dimen>
 
 </resources>

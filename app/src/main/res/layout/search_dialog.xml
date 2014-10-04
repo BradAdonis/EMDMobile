@@ -9,12 +9,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#012968"
-        android:id="@+id/searchHeader">
+        android:id="@+id/searchHeader"
+        android:padding="@dimen/item_spacing">
         <TextView
             android:id="@+id/lblSearchLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:text="@string/searchLabel"
             android:textSize="20dp"
             android:textColor="#FFF"

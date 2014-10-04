@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.emd.emdmobile.app.userRegistration"
-    android:background="#efefef">
+    android:background="@color/contentBackground">
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -19,7 +19,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/textBlue"
                     android:textSize="@dimen/contentDefault"
                     android:layout_margin="@dimen/keyline_margin"
                     android:text="@string/registrationPracticeNumber"
@@ -28,7 +27,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/textBlue"
                     android:textSize="@dimen/contentDefault"
                     android:layout_margin="@dimen/keyline_margin"
                     android:text="@string/registrationUnknown"
@@ -38,7 +36,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/textBlue"
                     android:textSize="@dimen/contentDefault"
                     android:layout_margin="@dimen/keyline_margin"
                     android:text="@string/registrationPracticeName"
@@ -47,7 +44,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/textBlue"
                     android:textSize="@dimen/contentDefault"
                     android:layout_margin="@dimen/keyline_margin"
                     android:text="@string/registrationUnknown"
@@ -57,7 +53,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/textBlue"
                     android:textSize="@dimen/contentDefault"
                     android:layout_margin="@dimen/keyline_margin"
                     android:text="@string/registrationUserName"
@@ -66,7 +61,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/textBlue"
                     android:textSize="@dimen/contentDefault"
                     android:layout_margin="@dimen/keyline_margin"
                     android:text="@string/registrationUnknown"
@@ -76,7 +70,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/textBlue"
                     android:textSize="@dimen/contentDefault"
                     android:layout_margin="@dimen/keyline_margin"
                     android:text="@string/registrationEmail"
@@ -85,7 +78,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/textBlue"
                     android:textSize="@dimen/contentDefault"
                     android:layout_margin="@dimen/keyline_margin"
                     android:text="@string/registrationUnknown"
@@ -95,7 +87,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/textBlue"
                     android:textSize="@dimen/contentDefault"
                     android:layout_margin="@dimen/keyline_margin"
                     android:text="@string/registrationMobile"
@@ -104,7 +95,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/textBlue"
                     android:textSize="@dimen/contentPrimary"
                     android:layout_margin="@dimen/keyline_margin"
                     android:text="@string/registrationUnknown"
@@ -122,7 +112,7 @@
             android:id="@+id/txtPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/white"
+            android:background="@color/contentBackground"
             android:layout_margin="@dimen/keyline_margin"
             android:inputType="textPassword"
             android:hint="@string/registrationPassword"
@@ -134,9 +124,7 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:padding="5dp"
-            android:textColor="#fff"
             android:text="@string/registrationSave"
-            android:background="@android:color/holo_orange_dark"
             android:layout_below="@+id/txtPassword"
             android:layout_margin="@dimen/item_spacing"/>
 
@@ -145,9 +133,7 @@
             android:layout_width="match_parent"
             android:padding="5dp"
             android:layout_height="40dp"
-            android:textColor="#fff"
             android:text="@string/registrationResetPassword"
-            android:background="@android:color/holo_orange_dark"
             android:layout_below="@id/btnSave"
             android:layout_margin="@dimen/item_spacing"/>
     </RelativeLayout>
