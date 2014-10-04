@@ -208,7 +208,7 @@ public class MainActivity extends Activity
 
         if(scheduleTask == null)
         {
-            scheduleTask = Executors.newScheduledThreadPool(5);    
+            scheduleTask = Executors.newScheduledThreadPool(5);
         }
 
         if(scheduleTask.isTerminated() || scheduleTask.isShutdown()) {
