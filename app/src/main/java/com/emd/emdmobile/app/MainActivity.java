@@ -143,20 +143,34 @@ public class MainActivity extends Activity
     protected void onResume()
     {
         clientSession.initPreferences(this);
-        scheduleTask.shutdown();
-        setupSchedule();
         super.onResume();
     }
 
     @Override
     protected void onRestart()
     {
+        clientSession.initPreferences(this);
+
+        if(scheduleTask.isTerminated() || scheduleTask.isShutdown())
+        {
+            setupSchedule();
+        }
+        else{
+            scheduleTask.shutdown();
+        }
+
         super.onRestart();
     }
 
     @Override
     protected void onStop()
     {
+        if(scheduleTask.isShutdown() || scheduleTask.isTerminated()){
+
+        }
+        else{
+            scheduleTask.shutdown();
+        }
         super.onStop();
     }
 
@@ -191,13 +205,20 @@ public class MainActivity extends Activity
     }
 
     private void setupSchedule(){
-        scheduleTask = Executors.newScheduledThreadPool(5);
-        scheduleTask.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                RefreshAll();
-            }
-        },clientSession.refreshFrequency,clientSession.refreshFrequency, TimeUnit.MINUTES);
+
+        if(scheduleTask == null)
+        {
+            scheduleTask = Executors.newScheduledThreadPool(5);    
+        }
+
+        if(scheduleTask.isTerminated() || scheduleTask.isShutdown()) {
+            scheduleTask.scheduleAtFixedRate(new Runnable() {
+                @Override
+                public void run() {
+                    RefreshAll();
+                }
+            }, clientSession.refreshFrequency, clientSession.refreshFrequency, TimeUnit.MINUTES);
+        }
     }
 
     //endregion
