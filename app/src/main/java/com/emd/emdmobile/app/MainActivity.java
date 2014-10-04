@@ -137,14 +137,7 @@ public class MainActivity extends Activity
     protected void onResume()
     {
         clientSession.initPreferences(this);
-        try{
-            scheduleTask.shutdown();
-        }
-        catch(Exception e){}
-
-        if(clientSession.schedulerEnabled == true) {
-            setupSchedule();
-        }
+        setupSchedule();
 
         super.onResume();
     }
@@ -152,6 +145,9 @@ public class MainActivity extends Activity
     @Override
     protected void onRestart()
     {
+       clientSession.initPreferences(this);
+       setupSchedule();
+
         super.onRestart();
     }
 
@@ -159,6 +155,10 @@ public class MainActivity extends Activity
     protected void onStop()
     {
         super.onStop();
+
+        if(scheduleTask != null){
+            scheduleTask.shutdown();
+        }
     }
 
     //endregion
@@ -187,18 +187,20 @@ public class MainActivity extends Activity
 
     private void setupSchedule(){
 
-        if(scheduleTask == null){
-            scheduleTask = Executors.newScheduledThreadPool(5);
-        }
+        if(clientSession.schedulerEnabled == true) {
+            if (scheduleTask == null) {
+                scheduleTask = Executors.newScheduledThreadPool(5);
+            }
 
-        if(scheduleTask.isShutdown() || scheduleTask.isTerminated()){
-            scheduleTask.scheduleAtFixedRate(new Runnable() {
-                @Override
-                public void run() {
-                    GetPracticePatients(false);
-                    GetPracticeClaims(false);
-                }
-            },clientSession.refreshFrequency,clientSession.refreshFrequency, TimeUnit.MINUTES);
+            if (scheduleTask.isShutdown() || scheduleTask.isTerminated()) {
+                scheduleTask.scheduleAtFixedRate(new Runnable() {
+                    @Override
+                    public void run() {
+                        GetPracticePatients(false);
+                        GetPracticeClaims(false);
+                    }
+                }, clientSession.refreshFrequency, clientSession.refreshFrequency, TimeUnit.MINUTES);
+            }
         }
     }
 
