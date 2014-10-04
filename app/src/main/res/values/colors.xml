@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="baseColor">#012968</color>
+    <color name="middleColor">#800446af</color>
+    <color name="highlightColor">#800664f7</color>
+    <color name="selectionDark">@android:color/holo_orange_dark</color>
+    <color name="selectionLight"></color>
+</resources>

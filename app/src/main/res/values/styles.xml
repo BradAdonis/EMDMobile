@@ -7,11 +7,28 @@
         <item name="android:textColorSecondary">#012968</item>
         <item name="android:textColorTertiary">#012968</item>
         <item name="android:actionBarStyle">@style/actionBar</item>
+        <item name="android:popupMenuStyle">@style/menuTextStyle</item>
+        <item name="android:actionDropDownStyle">@style/menuTextStyle</item>
     </style>
 
     <style name="actionBarOptions">
         <item name="android:background">#012968</item>
         <item name="android:popupBackground">#012968</item>
+    </style>
+
+    <style name="menuStyle" parent="android:Widget.Holo.Light.PopupMenu">
+        <item name="android:background">#fff</item>
+        <item name="android:popupBackground">#fff</item>
+    </style>
+
+    <style name="menuTextStyle" parent="android:TextAppearance.Holo.Widget.ActionBar.Menu">
+        <item name="android:background">#fff</item>
+        <item name="android:popupBackground">#fff</item>
+    </style>
+
+    <style name="dropMenuStyle" parent="android:Widget.Holo.Light.ListView.DropDown">
+        <item name="android:background">#fff</item>
+        <item name="android:popupBackground">#fff</item>
     </style>
 
     <style name="actionBar" parent="android:Widget.Holo.Light.ActionBar.Solid.Inverse">
