@@ -186,14 +186,20 @@ public class MainActivity extends Activity
     }
 
     private void setupSchedule(){
-        scheduleTask = Executors.newScheduledThreadPool(5);
-        scheduleTask.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                GetPracticePatients(false);
-                GetPracticeClaims(false);
-            }
-        },clientSession.refreshFrequency,clientSession.refreshFrequency, TimeUnit.MINUTES);
+
+        if(scheduleTask == null){
+            scheduleTask = Executors.newScheduledThreadPool(5);
+        }
+
+        if(scheduleTask.isShutdown() || scheduleTask.isTerminated()){
+            scheduleTask.scheduleAtFixedRate(new Runnable() {
+                @Override
+                public void run() {
+                    GetPracticePatients(false);
+                    GetPracticeClaims(false);
+                }
+            },clientSession.refreshFrequency,clientSession.refreshFrequency, TimeUnit.MINUTES);
+        }
     }
 
     //endregion
