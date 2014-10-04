@@ -9,16 +9,13 @@
         <item name="android:actionBarStyle">@style/actionBar</item>
     </style>
 
+    <style name="actionBarOptions">
+        <item name="android:background">#012968</item>
+        <item name="android:popupBackground">#012968</item>
+    </style>
+
     <style name="actionBar" parent="android:Widget.Holo.Light.ActionBar.Solid.Inverse">
         <item name="android:background">#012968</item>
-        <item name="android:textColor">#fff</item>
-    </style>
-
-    <style name="actionBarText" parent="android:Widget.ActionBar.TabBar">
-        <item name="android:textColor">#fff</item>
-    </style>
-
-    <style name="actionBarTabText" parent="android:Widget.Holo.ActionBar.TabText">
         <item name="android:textColor">#fff</item>
     </style>
 

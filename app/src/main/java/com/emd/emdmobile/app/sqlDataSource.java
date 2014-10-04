@@ -6,8 +6,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.preference.PreferenceManager;
-
-import java.security.cert.TrustAnchor;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -113,10 +111,6 @@ public class sqlDataSource {
                 break;
         }
 
-
-        //Cursor cursor = db.query(sqlDatabase.TABLE_OBJECT, allColumns, sqlDatabase.COLUMN_TYPE + " = ? and " + sqlDatabase.COLUMN_KEYWORDS + " = ?", argsarray, null, null, null);
-        //Cursor cursor = db.query(sqlDatabase.TABLE_OBJECT, allColumns, sqlDatabase.COLUMN_TYPE + " like '" + type + "'",null,null,null,null);
-        //Cursor cursor = db.query(sqlDatabase.TABLE_OBJECT, allColumns, null,null,null,null,null);
 
         int count = cursor.getCount();
 

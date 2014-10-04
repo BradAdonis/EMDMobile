@@ -8,20 +8,10 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link webView.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link webView#newInstance} factory method to
- * create an instance of this fragment.
- *
- */
 public class webView extends Fragment  {
 
     private class eMDWebViewClient extends WebViewClient {
@@ -44,7 +34,6 @@ public class webView extends Fragment  {
         return fragment;
     }
     public webView() {
-        // Required empty public constructor
     }
 
     @Override
@@ -78,7 +67,6 @@ public class webView extends Fragment  {
         return v;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -104,7 +92,6 @@ public class webView extends Fragment  {
     }
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
 

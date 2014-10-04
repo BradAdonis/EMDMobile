@@ -2,9 +2,6 @@ package com.emd.emdmobile.app;
 
 import java.io.Serializable;
 
-/**
- * Created by Bradl_000 on 2014-07-04.
- */
 public class userDetails implements Serializable {
     public String UserID;
     public String UserName;
