@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:enterFadeDuration="@integer/abc_max_action_buttons"
+    android:exitFadeDuration="@integer/abc_max_action_buttons">
     <item android:state_activated="true" android:drawable="@color/selectionDark"/>
     <item android:state_selected="true" android:drawable="@color/selectionDark"/>
     <item android:state_focused="true" android:drawable="@color/selectionDark"/>
