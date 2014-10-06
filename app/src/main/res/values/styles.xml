@@ -10,13 +10,13 @@
         <item name="android:actionBarTabBarStyle">@style/actionBarTab</item>
         <item name="android:buttonStyle">@style/button</item>
         <item name="android:popupMenuStyle">@style/listPopup</item>
-        <item name="android:dropDownListViewStyle">@style/listDropDown</item>
+        <!--<item name="android:dropDownListViewStyle">@style/listDropDown</item>-->
         <item name="android:actionBarWidgetTheme">@style/Theme.stylingActionBar.widget</item>
     </style>
 
     <style name="Theme.stylingActionBar.widget" parent="@android:style/Theme.Holo">
         <item name="android:popupMenuStyle">@style/listPopup</item>
-        <item name="android:dropDownListViewStyle">@style/listDropDown</item>
+        <!--<item name="android:dropDownListViewStyle">@style/listDropDown</item>-->
     </style>
 
 
@@ -40,9 +40,9 @@
         <item name="android:popupBackground">@color/textHeader</item>
     </style>
 
-    <style name="listDropDown" parent="android:Widget.Holo.ListView.DropDown">
+    <!--<style name="listDropDown" parent="android:Widget.Holo.ListView.DropDown">
         <item name="android:listSelector">@drawable/listitem_background</item>
-    </style>
+    </style>-->
 
     <style name="button" parent="android:Widget.Button">
         <item name="android:textColor">@color/textHeader</item>
