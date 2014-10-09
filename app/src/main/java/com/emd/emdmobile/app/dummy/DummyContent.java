@@ -1,4 +1,4 @@
-package com.emd.emdmobile.medaidscharged.dummy;
+package com.emd.emdmobile.app.dummy;
 
 import java.util.ArrayList;
 import java.util.HashMap;

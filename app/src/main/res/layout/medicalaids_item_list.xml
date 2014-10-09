@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" android:padding="@dimen/item_spacing">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imgReport"
+        android:src="@drawable/ic_action_report"
+        android:layout_margin="@dimen/item_spacing"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtMedicalAidName"
+        android:layout_toRightOf="@+id/imgReport"
+        android:layout_margin="@dimen/item_spacing"
+        android:textSize="@dimen/contentPrimary"
+        android:text="@string/medicalAidName"/>
+
+<!--    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtSectionHeaderA"
+        android:layout_below="@id/txtMedicalAidName"
+        android:layout_margin="@dimen/item_spacing"
+        android:textSize="@dimen/contentDefault"
+        android:text="@string/medicalAidSectionA"/>-->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtConsultationHeader"
+        android:layout_toRightOf="@id/imgReport"
+        android:layout_below="@id/txtMedicalAidName"
+        android:textSize="@dimen/contentDefault"
+        android:layout_margin="@dimen/item_spacing"
+        android:text="@string/medicalAidConsultationHeader"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtConsultationText"
+        android:layout_toRightOf="@id/txtConsultationHeader"
+        android:layout_below="@id/txtMedicalAidName"
+        android:textSize="@dimen/contentDefault"
+        android:layout_margin="@dimen/item_spacing"
+        android:text="@string/medicalAidConsultationTotal"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtProceduresHeader"
+        android:layout_toRightOf="@id/imgReport"
+        android:layout_below="@id/txtConsultationHeader"
+        android:textSize="@dimen/contentDefault"
+        android:layout_margin="@dimen/item_spacing"
+        android:text="@string/medicalAidProcedureHeader"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtProceduresText"
+        android:layout_toRightOf="@id/txtConsultationHeader"
+        android:layout_below="@id/txtConsultationHeader"
+        android:textSize="@dimen/contentDefault"
+        android:layout_margin="@dimen/item_spacing"
+        android:text="@string/medicalAidConsultationTotal"/>
+
+    <!--<TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/item_spacing"
+        android:id="@+id/txtSectionHeaderB"
+        android:layout_below="@id/txtProceduresHeader"
+        android:textSize="@dimen/contentDefault"
+        android:text="@string/medicalAidSectionB"/>-->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/item_spacing"
+        android:id="@+id/txtAcuteHeader"
+        android:layout_below="@id/txtProceduresHeader"
+        android:layout_toRightOf="@id/imgReport"
+        android:textSize="@dimen/contentDefault"
+        android:text="@string/medicalAidAcuteHeader"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/item_spacing"
+        android:id="@+id/txtAcuteText"
+        android:layout_below="@id/txtProceduresHeader"
+        android:layout_toRightOf="@id/txtConsultationHeader"
+        android:textSize="@dimen/contentDefault"
+        android:text="@string/medicalAidAcuteTotal"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/item_spacing"
+        android:id="@+id/txtChronicHeader"
+        android:layout_below="@id/txtAcuteHeader"
+        android:layout_toRightOf="@id/imgReport"
+        android:textSize="@dimen/contentDefault"
+        android:text="@string/medicalAidChronicHeader"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/item_spacing"
+        android:id="@+id/txtChronicText"
+        android:layout_below="@id/txtAcuteHeader"
+        android:layout_toRightOf="@id/txtConsultationHeader"
+        android:textSize="@dimen/contentDefault"
+        android:text="@string/medicalAidChronicTotal"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/item_spacing"
+        android:id="@+id/txtGrandTotalHeader"
+        android:layout_below="@id/txtChronicHeader"
+        android:textSize="@dimen/contentDefault"
+        android:text="@string/medicalAidTotalHeader"
+        android:layout_toRightOf="@id/imgReport"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/item_spacing"
+        android:id="@+id/txtGrandTotal"
+        android:layout_below="@id/txtChronicHeader"
+        android:layout_toRightOf="@id/txtConsultationHeader"
+        android:textSize="@dimen/contentDefault"
+        android:text="@string/medicalAidTotal"/>
+
+</RelativeLayout>

@@ -70,11 +70,11 @@ public class NavigationDrawerFragment extends Fragment {
         });
 
         String[] itemList = {
-                "Patients", "Claims"
+                "Patients", "Claims", "Medical Aids",
         };
 
         Integer[] itemImages = {
-          R.drawable.ic_patient, R.drawable.ic_claims
+          R.drawable.ic_patient, R.drawable.ic_claims, R.drawable.ic_report
         };
 
         drawerItemList adapter = new drawerItemList(this.getActivity(), itemList, itemImages);
@@ -178,8 +178,10 @@ public class NavigationDrawerFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+
         outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
+        super.onSaveInstanceState(outState);
+
     }
 
     @Override
@@ -200,6 +202,7 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (mDrawerToggle.onOptionsItemSelected(item)) {
+            mCurrentSelectedPosition = item.getItemId();
             return true;
         }
 

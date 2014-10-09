@@ -10,7 +10,7 @@
     <string name="appCommProtocolDesc">Web communication protocol</string>
     <string name="appCommServer">Server</string>
     <string name="appCommServerDescription">Web server DNS name</string>
-    <string name="appCommServerDefault">ontimedev.e-md.co.za</string>
+    <string name="appCommServerDefault">ontime.e-md.co.za</string>
     <string name="appCommMethod">Method</string>
     <string name="appCommMethodDescription">Web server web method</string>
     <string name="appCommMethodDefault">eMDSwitchMobileRequest</string>
@@ -46,7 +46,7 @@
     <!-- Application Drawer Strings -->
     <string name="title_section1">Patients</string>
     <string name="title_section2">Claims</string>
-    <string name="title_section3">Med Aid Outstanding</string>
+    <string name="title_section3">Medical Aids</string>
     <string name="title_section4">Totals Monthly</string>
     <string name="title_section5">Patient Liable</string>
     <string name="title_section6">Liability</string>
@@ -124,5 +124,19 @@
     <string name="claimMedAidHeader">MedAid</string>
     <string name="claimPatHeader">Patient</string>
     <string name="claimOutHeader">Outstanding</string>
+    <!--Medical Aid Item List-->
+    <string name="medicalAidName">Discovery</string>
+    <string name="medicalAidConsultationHeader">Consultations</string>
+    <string name="medicalAidConsultationTotal">100.00</string>
+    <string name="medicalAidProcedureHeader">Procedures</string>
+    <string name="medicalAidProcedureTotal">100.00</string>
+    <string name="medicalAidAcuteHeader">Acute</string>
+    <string name="medicalAidAcuteTotal">100.00</string>
+    <string name="medicalAidChronicHeader">Chronic</string>
+    <string name="medicalAidChronicTotal">100.00</string>
+    <string name="medicalAidTotalHeader">Grand Total</string>
+    <string name="medicalAidTotal">1000.00</string>
+    <string name="medicalAidSectionA">Visit Information</string>
+    <string name="medicalAidSectionB">Medicines and Materials</string>
 
 </resources>

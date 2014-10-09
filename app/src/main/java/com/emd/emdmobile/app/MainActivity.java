@@ -34,6 +34,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 
@@ -41,6 +42,7 @@ public class MainActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks, webView.OnFragmentInteractionListener, patientlistFragment.OnFragmentInteractionListener, asyncTaskCompleteListner, claimlistFragment.OnFragmentInteractionListener {
 
     private ScheduledExecutorService scheduleTask;
+    private ScheduledFuture<?> scheduleFuture;
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private String mTitle;
     private int mPosition = 0;
@@ -53,13 +55,16 @@ public class MainActivity extends Activity
     private final static String MessagePatient = "Syncing Patients From Cloud";
     private final static String MessageClaim = "Syncing Claims From Cloud";
 
-    private final static String JsonErrorPatient = "No new patient information has been retrieved";
-    private final static String JsonErrorClaim = "No new claim information has been retrieved";
+    private final static String JsonErrorPatient = "No new Patient information has been retrieved";
+    private final static String JsonErrorClaim = "No new Claim information has been retrieved";
+    private final static String JosnErrorMedicalAid = "No new Medical Aid information has been retrieved";
     private final static String JsonPatientUpdateMessage = "Updating Patients";
     private final static String JsonClaimUpdateMessage = "Updating Claims";
     private final static String JsonPatientSelectMessage = "Retrieving Patient Information";
+    private final static String JsonMedicalAidMessage = "Retrieving Medical Aid Information";
     private final static String JsonClaimSelectMessage = "Retrieving Claim Information";
     private final static String JsonPatient = "patient";
+    private final static String JsonMedicalAid = "medicalaid";
     private final static String JsonPatientSelect = "selectpatients";
     private final static String JsonPatientInsert = "insertpatient";
     private final static String JsonClaim = "claim";
@@ -68,7 +73,7 @@ public class MainActivity extends Activity
     private final static String JsonAll = "all";
 
     private final static String WebPagePatientForm = "mPatients";
-    private final static String WebPageClaimForm = "mPatients";
+    private final static String WebPageClaimForm = "mClaims";
 
     private final static String PageTitlePatients = "Patients";
     private final static String PageTitleClaims = "Claims";
@@ -103,9 +108,6 @@ public class MainActivity extends Activity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        if(clientSession.schedulerEnabled == true) {
-            setupSchedule();
-        }
     }
 
     @Override
@@ -138,6 +140,7 @@ public class MainActivity extends Activity
     {
         clientSession.initPreferences(this);
         setupSchedule();
+        CreateNavigation(mPosition);
 
         super.onResume();
     }
@@ -145,10 +148,7 @@ public class MainActivity extends Activity
     @Override
     protected void onRestart()
     {
-       clientSession.initPreferences(this);
-       setupSchedule();
-
-        super.onRestart();
+       super.onRestart();
     }
 
     @Override
@@ -157,7 +157,7 @@ public class MainActivity extends Activity
         super.onStop();
 
         if(scheduleTask != null){
-            scheduleTask.shutdown();
+           scheduleFuture.cancel(true);
         }
     }
 
@@ -185,22 +185,33 @@ public class MainActivity extends Activity
         aTask.execute(clientSession.getClaimURL(clientSession.claimModifiedDate));
     }
 
+    private void GetMedicalAid(boolean ShowProgress){
+        asyncTask aTask = new asyncTask(this);
+        aTask.setClientSession(clientSession);
+        aTask.setAsyncSystem(asyncTask.asyncSystem.WebMethod);
+        aTask.setAsyncMethod(JsonMedicalAid);
+        aTask.setMessage(JsonMedicalAidMessage);
+        aTask.setShowProgress(ShowProgress);
+        aTask.execute(clientSession.getMedicalAidURL());
+    }
+
     private void setupSchedule(){
 
         if(clientSession.schedulerEnabled == true) {
             if (scheduleTask == null) {
                 scheduleTask = Executors.newScheduledThreadPool(5);
             }
-
-            if (scheduleTask.isShutdown() || scheduleTask.isTerminated()) {
-                scheduleTask.scheduleAtFixedRate(new Runnable() {
-                    @Override
-                    public void run() {
-                        GetPracticePatients(false);
-                        GetPracticeClaims(false);
-                    }
-                }, clientSession.refreshFrequency, clientSession.refreshFrequency, TimeUnit.MINUTES);
+            else{
+                scheduleFuture.cancel(true);
             }
+
+            scheduleFuture = scheduleTask.scheduleAtFixedRate(new Runnable() {
+                @Override
+                public void run() {
+                    GetPracticePatients(false);
+                    GetPracticeClaims(false);
+                }
+            }, clientSession.refreshFrequency, clientSession.refreshFrequency, TimeUnit.MINUTES);
         }
     }
 
@@ -339,6 +350,33 @@ public class MainActivity extends Activity
         }
     }
 
+    private void CreateJsonMedicalAid(String result){
+        ArrayList<medicalAidDetails> mAidsList = new ArrayList<medicalAidDetails>();
+        String[] medicalaidNames;
+
+        try
+        {
+            JSONArray maidArray = new JSONArray(result);
+            medicalaidNames = new String[maidArray.length()];
+
+            for(int i = 0; i < maidArray.length(); i++){
+                JSONObject userObject = new JSONObject(maidArray.get(i).toString());
+                Gson g = new Gson();
+                medicalAidDetails a = g.fromJson(userObject.toString(),medicalAidDetails.class);
+                mAidsList.add(a);
+                medicalaidNames[i] = a.MedicalAid;
+            }
+
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.container, medicalAidsListFragment.newInstance(mAidsList,medicalaidNames)).commit();
+
+
+        }
+        catch(JSONException e){
+            clientSession.showToast(MainActivity.this, JsonErrorClaim);
+        }
+    }
+
     //endregion
 
     //region SQL TASKS
@@ -391,7 +429,7 @@ public class MainActivity extends Activity
                 break;
             case 3:
                 mTitle = getString(R.string.title_section3);
-                BuildWebFragmentView("mReportsTotalsMonthly");
+                GetMedicalAid(true);
                 break;
             case 4:
                 mTitle = getString(R.string.title_section4);
@@ -576,6 +614,9 @@ public class MainActivity extends Activity
         else if (a.getMethod() == JsonAll){
 
         }
+        else if(a.getMethod() == JsonMedicalAid){
+            CreateJsonMedicalAid(a.getResult());
+        }
     }
 
     @Override
@@ -629,7 +670,7 @@ public class MainActivity extends Activity
         }
 
         if(Function.contentEquals(JsonClaim)){
-            Url = clientSession.getDBUrlDocument(WebPageClaimForm,id);
+            Url = clientSession.getDBUrlDocument(WebPageClaimForm, id);
         }
 
         clientSession.currentURL = Url;
@@ -695,9 +736,8 @@ public class MainActivity extends Activity
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-        if(mPosition != 0) {
-            position = mPosition;
-        }
+
+        mPosition = position;
 
         if(clientSession == null){
             clientSession = (emdSession)getIntent().getExtras().getSerializable(ClientSession);
